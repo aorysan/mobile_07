@@ -6,6 +6,7 @@
 | Week | Judul | Link |
 |:----:|-------|------------|
 | 1    | Pengantar Pemrograman Mobile | https://github.com/aorysan/mobile_07/tree/main/week01 |
-| 2    | Pengantar Bahasa Pemrograman Dart - Bagian 1 | https://github.com/aorysan/mobile_07/tree/main/week02 |
-| 3    | Pengantar Bahasa Pemrograman Dart - Bagian 2 | https://github.com/aorysan/mobile_07/tree/main/week03 |
+| 2    | Pengantar Bahasa Pemrograman Dart - Bagian 1 | https://github.com/aorysan/mobile_07/tree/main/week02/hasilPraktikum.md |
+| 3    | Pengantar Bahasa Pemrograman Dart - Bagian 2 | https://github.com/aorysan/mobile_07/tree/main/week03/laporan.md |
 | 4    | Aplikasi Pertama & Widget Dasar Flutter2 | https://github.com/aorysan/mobile_07/blob/main/week04/laporanPraktikum.md |
+| 5    | Aplikasi Pertama & Widget Dasar Flutter | https://github.com/aorysan/mobile_07/blob/main/week05/hello_world/README.md |
