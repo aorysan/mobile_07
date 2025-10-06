@@ -156,6 +156,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
 ![alt text](img/image.png)
 
+![alt text](image.png)
+
 ### Tugas Praktikum
 
 1. Selesaikan Praktikum tersebut, lalu dokumentasikan dan push ke repository Anda berupa screenshot hasil pekerjaan beserta penjelasannya di file README.md!

@@ -60,8 +60,8 @@ class _MyHomePageState extends State<MyHomePage> {
             Container(
               color: Colors.greenAccent,
               width: 100,
-              child: const RedTextWidget(
-                text: 'You have pushed the button this many times:',
+              child: const Text(
+                'You have pushed the button this many times:',
               ),
             ),
             Text(
