@@ -11,3 +11,4 @@
 | 4    | Pemrograman Dasar Dart - Bag.3 (Collections dan Functions) | https://github.com/aorysan/mobile_07/blob/main/week04/laporanPraktikum.md |
 | 5    | Aplikasi Pertama & Widget Dasar Flutter | https://github.com/aorysan/mobile_07/blob/main/week05/hello_world/README.md |
 | 6    | Layout dan Navigasi | https://github.com/aorysan/mobile_07/blob/main/week06/README.md |
+| 7    | Manajemen Plugin | [https://github.com/aorysan/mobile_07/blob/main/week06/README.md] |
