@@ -12,3 +12,4 @@
 | 5    | Aplikasi Pertama & Widget Dasar Flutter | https://github.com/aorysan/mobile_07/blob/main/week05/hello_world/README.md |
 | 6    | Layout dan Navigasi | https://github.com/aorysan/mobile_07/blob/main/week06/README.md |
 | 7    | Manajemen Plugin | https://github.com/aorysan/mobile_07/blob/main/week07/flutter_plugin_pubdev/README.md |
+| 9    | Kamera | https://github.com/aorysan/mobile_07/blob/main/week09/kamera/README.md |
