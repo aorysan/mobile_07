@@ -13,3 +13,4 @@
 | 6    | Layout dan Navigasi | https://github.com/aorysan/mobile_07/blob/main/week06/README.md |
 | 7    | Manajemen Plugin | https://github.com/aorysan/mobile_07/blob/main/week07/flutter_plugin_pubdev/README.md |
 | 9    | Kamera | https://github.com/aorysan/mobile_07/blob/main/week09/kamera/README.md |
+| 10    | Dasar State Management | https://github.com/aorysan/mobile_07/blob/main/week10/flutterstate/README.md |
