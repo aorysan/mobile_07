@@ -294,3 +294,43 @@ getNumber().then((value) {
 | `completer.complete(42)`     | Menyelesaikan Future dengan nilai 42                 |
 | `completer.completeError(e)` | Menyelesaikan Future dengan status error             |
 | `setState()`                 | Memperbarui tampilan UI Flutter setelah data berubah |
+
+### Praktikum 4
+
+#### Langkah 1
+
+- Tambahkan method ini ke dalam class _FuturePageState
+
+``` dart
+  void returnFG() {
+    FutureGroup<int> futureGroup = FutureGroup<int>();
+    futureGroup.add(returnOneAsync());
+    futureGroup.add(returnTwoAsync());
+    futureGroup.add(returnThreeAsync());
+    futureGroup.close();
+
+    futureGroup.future.then((List<int> values) {
+      int total = 0;
+      for (var value in values) {
+        total += value;
+      }
+      setState(() {
+        result = total.toString();
+      });
+    });
+  }
+```
+
+#### Langkah 2
+
+- Anda bisa hapus atau comment kode sebelumnya, kemudian panggil method dari langkah 1 tersebut.
+
+``` dart
+returnFG();
+```
+
+#### Langkah 3
+
+- Anda akan melihat hasilnya dalam 3 detik berupa angka 6 lebih cepat dibandingkan praktikum sebelumnya menunggu sampai 9 detik.
+
+![alt text](<gif1.gif>)
