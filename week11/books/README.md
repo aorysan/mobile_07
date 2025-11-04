@@ -194,3 +194,60 @@ onPressed: () {
 
 - Kode dari langkah 1 dan 2 diatas yaitu untuk menambah jumlah nilai dari total pada setiap delay 3 detik yang mana pada tiap delay memiliki nilai yang berbeda untuk ditambahkan pada total.
 
+### Praktikum 3
+
+#### Langkah 1
+
+- Pastikan telah impor package async berikut.
+
+``` dart
+import 'package:async/async.dart';
+```
+
+#### Langkah 2
+
+- Tambahkan variabel late dan method di class _FuturePageState seperti ini.
+
+``` dart
+late Completer completer;
+
+Future getNumber() {
+  completer = Completer<int>();
+  calculate();
+  return completer.future;
+}
+
+Future calculate() async {
+  await Future.delayed(const Duration(seconds : 5));
+  completer.complete(42);
+}
+```
+
+#### Langkah 3
+
+- Tambahkan kode berikut pada fungsi onPressed(). Kode sebelumnya bisa Anda comment.
+
+
+
+``` dart
+getNumber().then((value) {
+    setState(() {
+    result = value.toString();
+    });
+});
+```
+
+#### Langkah 4
+
+- Terakhir, run atau tekan F5 untuk melihat hasilnya jika memang belum running. Bisa juga lakukan hot restart jika aplikasi sudah running. Maka hasilnya akan seperti gambar berikut ini. Setelah 5 detik, maka angka 42 akan tampil.
+
+![alt text](image-3.png)
+
+![alt text](<gif.gif>)
+
+| Bagian                   | Fungsi                                            |
+| ------------------------ | ------------------------------------------------- |
+| `Completer<int>()`       | Membuat Future yang bisa diselesaikan manual      |
+| `completer.future`       | Future yang akan dikembalikan dan bisa di-`await` |
+| `completer.complete(42)` | Menandakan Future selesai dengan nilai 42         |
+| `Future.delayed(...)`    | Menunda penyelesaian selama 5 detik               |

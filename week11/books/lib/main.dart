@@ -31,6 +31,19 @@ class FuturePage extends StatefulWidget {
 }
 
 class _FuturePageState extends State<FuturePage> {
+  late Completer completer;
+
+  Future getNumber() {
+    completer = Completer<int>();
+    calculate();
+    return completer.future;
+  }
+
+  Future calculate() async {
+    await Future.delayed(const Duration(seconds: 5));
+    completer.complete(42);
+  }
+
   Future<int> returnOneAsync() async {
     await Future.delayed(const Duration(seconds: 3));
     return 1;
@@ -46,7 +59,7 @@ class _FuturePageState extends State<FuturePage> {
     return 3;
   }
 
-  Future count () async {
+  Future count() async {
     int total = 0;
     total = await returnOneAsync();
     total += await returnTwoAsync();
@@ -77,20 +90,11 @@ class _FuturePageState extends State<FuturePage> {
             ElevatedButton(
               child: const Text('GO!'),
               onPressed: () {
-                  count();
-                getData()
-                    .then((value) {
-                      setState(() {
-                        result = value.body.toString().substring(0, 450);
-                        setState(() {});
-                      });
-                    })
-                    .catchError((error) {
-                      setState(() {
-                        result = 'Error: $error';
-                        setState(() {});
-                      });
-                    });
+                getNumber().then((value) {
+                  setState(() {
+                    result = value.toString();
+                  });
+                });
               },
             ),
             const Spacer(),
