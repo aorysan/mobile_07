@@ -105,3 +105,34 @@ class _FuturePageState extends State<FuturePage> {
 
 ![alt text](image.png)
 
+#### Langkah 5
+
+- Tambahkan kode pada onPressed di ElevatedButton seperti berikut.
+
+``` dart
+            ElevatedButton(child: const Text('GO!'), onPressed: () {
+              setState(() {
+                result = 'Loading...';
+              });
+              getData().then((value) {
+                setState(() {
+                  result = value.body.toString().substring(0, 450);
+                  setState(() {});
+                });
+              }).catchError((error) {
+                setState(() {
+                  result = 'Error: $error';
+                  setState(() {});
+                });
+              });
+            }),
+```
+
+- Lakukan run aplikasi Flutter Anda. Anda akan melihat tampilan akhir seperti gambar berikut. Jika masih terdapat error, silakan diperbaiki hingga bisa running.
+
+![alt text](image-1.png)
+
+| Bagian kode                | Fungsi utama                                                                                              |
+| -------------------------- | --------------------------------------------------------------------------------------------------------- |
+| `substring(0, 450)`        | Membatasi teks hasil HTTP hanya 450 karakter pertama                                                      |
+| `catchError((error){...})` | Menangani error dari proses asynchronous (`Future`) agar aplikasi tidak crash dan menampilkan pesan error |
