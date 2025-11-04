@@ -334,3 +334,68 @@ returnFG();
 - Anda akan melihat hasilnya dalam 3 detik berupa angka 6 lebih cepat dibandingkan praktikum sebelumnya menunggu sampai 9 detik.
 
 ![alt text](<gif1.gif>)
+
+#### Langkah 4
+
+- Anda dapat menggunakan FutureGroup dengan Future.wait seperti kode berikut.
+
+``` dart
+final futures = Future.wait<int>([
+    returnOneAsync(),
+    returnTwoAsync(),
+    returnThreeAsync(),
+]);
+```
+
+- Penjelasan 
+
+| Aspek                          | `Future.wait()`              | `FutureGroup`                       |
+| ------------------------------ | ---------------------------- | ----------------------------------- |
+| **Sumber**                     | Built-in di Dart core        | Perlu `package:async`               |
+| **Cara menambahkan Future**    | Sekaligus (dalam list)       | Satu per satu dengan `.add()`       |
+| **Menambahkan setelah mulai?** | Tidak bisa                   | Bisa (sebelum `.close()`)           |
+| **Menutup daftar Future**      | Otomatis                     | Manual dengan `.close()`            |
+| **Error handling**             | Gagal jika satu Future error | Bisa ditangani manual               |
+| **Cocok untuk**                | Future tetap dan diketahui   | Future dinamis yang muncul bertahap |
+
+### Praktikum 5
+
+#### Langkah 1
+
+- Tambahkan method ini ke dalam class _FuturePageState
+
+``` dart
+  Future returnError() async {
+    await Future.delayed(const Duration(seconds: 2));
+    throw Exception('Error walaw e!');
+  }
+```
+
+#### Langkah 2
+
+- Ganti dengan kode berikut
+
+``` dart
+returnError()
+    .then((value) {
+        setState(() {
+        result = 'Sukses: $value';
+        });
+    })
+    .catchError((onError) {
+        setState(() {
+        result = onError.toString();
+        });
+    })
+    .whenComplete(() => print('Kelar wok'));
+```
+
+#### Langkah 3
+
+- Lakukan run dan klik tombol GO! maka akan menghasilkan seperti gambar berikut.
+
+![alt text](image-4.png)
+
+![alt text](image-5.png)
+
+![alt text](<gif2.gif>)

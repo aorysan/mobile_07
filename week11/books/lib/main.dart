@@ -1,4 +1,4 @@
-import 'package:async/async.dart';
+// import 'package:async/async.dart';
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
@@ -32,14 +32,25 @@ class FuturePage extends StatefulWidget {
 }
 
 class _FuturePageState extends State<FuturePage> {
-  void returnFG() {
-    FutureGroup<int> futureGroup = FutureGroup<int>();
-    futureGroup.add(returnOneAsync());
-    futureGroup.add(returnTwoAsync());
-    futureGroup.add(returnThreeAsync());
-    futureGroup.close();
+  Future returnError() async {
+    await Future.delayed(const Duration(seconds: 2));
+    throw Exception('Error walaw e!');
+  }
 
-    futureGroup.future.then((List<int> values) {
+  void returnFG() {
+    // FutureGroup<int> futureGroup = FutureGroup<int>();
+    // futureGroup.add(returnOneAsync());
+    // futureGroup.add(returnTwoAsync());
+    // futureGroup.add(returnThreeAsync());
+    // futureGroup.close();
+
+    final futures = Future.wait<int>([
+      returnOneAsync(),
+      returnTwoAsync(),
+      returnThreeAsync(),
+    ]);
+
+    futures.then((List<int> values) {
       int total = 0;
       for (var value in values) {
         total += value;
@@ -118,7 +129,18 @@ class _FuturePageState extends State<FuturePage> {
             ElevatedButton(
               child: const Text('GO!'),
               onPressed: () {
-                returnFG();
+                returnError()
+                    .then((value) {
+                      setState(() {
+                        result = 'Sukses: $value';
+                      });
+                    })
+                    .catchError((onError) {
+                      setState(() {
+                        result = onError.toString();
+                      });
+                    })
+                    .whenComplete(() => print('Kelar wok'));
               },
             ),
             const Spacer(),
