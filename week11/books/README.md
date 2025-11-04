@@ -136,3 +136,61 @@ class _FuturePageState extends State<FuturePage> {
 | -------------------------- | --------------------------------------------------------------------------------------------------------- |
 | `substring(0, 450)`        | Membatasi teks hasil HTTP hanya 450 karakter pertama                                                      |
 | `catchError((error){...})` | Menangani error dari proses asynchronous (`Future`) agar aplikasi tidak crash dan menampilkan pesan error |
+
+### Praktikum 2
+
+#### Langkah 1
+
+- Tambahkan tiga method berisi kode seperti berikut di dalam class _FuturePageState.
+
+``` dart
+Future<int> returnOneAsync() async {
+  await Future.delayed(const Duration(seconds: 3));
+  return 1;
+}
+
+Future<int> returnTwoAsync() async {
+  await Future.delayed(const Duration(seconds: 3));
+  return 2;
+}
+
+Future<int> returnThreeAsync() async {
+  await Future.delayed(const Duration(seconds: 3));
+  return 3;
+}
+```
+
+#### Langkah 2
+
+- Lalu tambahkan lagi method ini di bawah ketiga method sebelumnya.
+
+``` dart
+  Future count () async {
+    int total = 0;
+    total = await returnOneAsync();
+    total += await returnTwoAsync();
+    total += await returnThreeAsync();
+
+    setState(() {
+      result = total.toString();
+    });
+  }
+```
+
+#### Langkah 3
+
+- Lakukan comment kode sebelumnya, ubah isi kode onPressed() menjadi seperti berikut.
+
+``` dart
+onPressed: () {
+    count();
+```
+
+#### Langkah 4
+
+- Akhirnya, run atau tekan F5 jika aplikasi belum running. Maka Anda akan melihat seperti gambar berikut, hasil angka 6 akan tampil setelah delay 9 detik.
+
+![alt text](image-2.png)
+
+- Kode dari langkah 1 dan 2 diatas yaitu untuk menambah jumlah nilai dari total pada setiap delay 3 detik yang mana pada tiap delay memiliki nilai yang berbeda untuk ditambahkan pada total.
+

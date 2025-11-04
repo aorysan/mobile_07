@@ -31,6 +31,32 @@ class FuturePage extends StatefulWidget {
 }
 
 class _FuturePageState extends State<FuturePage> {
+  Future<int> returnOneAsync() async {
+    await Future.delayed(const Duration(seconds: 3));
+    return 1;
+  }
+
+  Future<int> returnTwoAsync() async {
+    await Future.delayed(const Duration(seconds: 3));
+    return 2;
+  }
+
+  Future<int> returnThreeAsync() async {
+    await Future.delayed(const Duration(seconds: 3));
+    return 3;
+  }
+
+  Future count () async {
+    int total = 0;
+    total = await returnOneAsync();
+    total += await returnTwoAsync();
+    total += await returnThreeAsync();
+
+    setState(() {
+      result = total.toString();
+    });
+  }
+
   Future<Response> getData() async {
     const authority = 'www.googleapis.com';
     const path = '/books/v1/volumes/MbOkkqDEJbkC';
@@ -48,22 +74,25 @@ class _FuturePageState extends State<FuturePage> {
         child: Column(
           children: [
             const Spacer(),
-            ElevatedButton(child: const Text('GO!'), onPressed: () {
-              setState(() {
-                result = 'Loading...';
-              });
-              getData().then((value) {
-                setState(() {
-                  result = value.body.toString().substring(0, 450);
-                  setState(() {});
-                });
-              }).catchError((error) {
-                setState(() {
-                  result = 'Error: $error';
-                  setState(() {});
-                });
-              });
-            }),
+            ElevatedButton(
+              child: const Text('GO!'),
+              onPressed: () {
+                  count();
+                getData()
+                    .then((value) {
+                      setState(() {
+                        result = value.body.toString().substring(0, 450);
+                        setState(() {});
+                      });
+                    })
+                    .catchError((error) {
+                      setState(() {
+                        result = 'Error: $error';
+                        setState(() {});
+                      });
+                    });
+              },
+            ),
             const Spacer(),
             Text(result),
             const Spacer(),
