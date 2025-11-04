@@ -132,6 +132,8 @@ class _FuturePageState extends State<FuturePage> {
 
 ![alt text](image-1.png)
 
+- Penjelasan
+
 | Bagian kode                | Fungsi utama                                                                                              |
 | -------------------------- | --------------------------------------------------------------------------------------------------------- |
 | `substring(0, 450)`        | Membatasi teks hasil HTTP hanya 450 karakter pertama                                                      |
@@ -245,9 +247,50 @@ getNumber().then((value) {
 
 ![alt text](<gif.gif>)
 
+- Penjelasan
+
 | Bagian                   | Fungsi                                            |
 | ------------------------ | ------------------------------------------------- |
 | `Completer<int>()`       | Membuat Future yang bisa diselesaikan manual      |
 | `completer.future`       | Future yang akan dikembalikan dan bisa di-`await` |
 | `completer.complete(42)` | Menandakan Future selesai dengan nilai 42         |
 | `Future.delayed(...)`    | Menunda penyelesaian selama 5 detik               |
+
+#### Langkah 5
+
+- Gantilah isi code method calculate() seperti kode berikut, atau Anda dapat membuat calculate2()
+
+``` dart
+  calculate() async {
+    try {
+      await new Future.delayed(const Duration(seconds: 5));
+      completer.complete(42);
+    } catch (e) {
+      completer.completeError(e);
+    }
+  }
+```
+
+#### Langkah 6
+
+- Ganti menjadi kode seperti berikut.
+
+``` dart
+getNumber().then((value) {
+  setState(() {
+    result = value.toString();
+  });
+}).catchError((e) {
+  result = 'An error occurred';
+});
+```
+
+- Penjelasan
+
+| Kode                         | Fungsi                                               |
+| ---------------------------- | ---------------------------------------------------- |
+| `.then((value){ ... })`      | Dijalankan saat Future selesai dengan sukses         |
+| `.catchError((e){ ... })`    | Dijalankan saat Future gagal (ada error)             |
+| `completer.complete(42)`     | Menyelesaikan Future dengan nilai 42                 |
+| `completer.completeError(e)` | Menyelesaikan Future dengan status error             |
+| `setState()`                 | Memperbarui tampilan UI Flutter setelah data berubah |
