@@ -14,7 +14,7 @@ class MasterPlanApp extends StatelessWidget {
     return PlanProvider(
       notifier: ValueNotifier<List<Plan>>(const []),
       child: MaterialApp(
-        title: 'State management app',
+        title: 'Management app wok',
         theme: ThemeData(primarySwatch: Colors.blue),
         home: const PlanCreatorScreen(),
       ),
