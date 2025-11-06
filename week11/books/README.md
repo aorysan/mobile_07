@@ -399,3 +399,132 @@ returnError()
 ![alt text](image-5.png)
 
 ![alt text](<gif2.gif>)
+
+#### Langkah 4
+
+- Tambahkan kode ini di dalam class _FutureStatePage
+
+``` dart
+  Future handleError() async {
+    try {
+      await returnError();
+    } catch (e) {
+      setState(() {
+        result = e.toString();
+      });
+    } finally {
+      print('Kelar wok');
+    }
+  }
+```
+
+![alt text](image-6.png)
+
+![alt text](image-8.png)
+
+- Penjelasan 
+
+| Aspek                | `returnError()`               | `handleError()`                               |
+| -------------------- | ----------------------------- | --------------------------------------------- |
+| **Fungsi utama**     | Menimbulkan error             | Menangani error dari `returnError()`          |
+| **Error handling**   | Tidak ada (`throw Exception`) | Ada (`try` / `catch` / `finally`)             |
+| **Hasil Future**     | Future gagal (error)          | Future berhasil (karena error ditangani)      |
+| **Dampak ke UI**     | Tidak mengubah UI             | Mengubah variabel `result` lewat `setState()` |
+| **Output di konsol** | Tidak mencetak apa pun        | Selalu mencetak `"Kelar wok"` di akhir        |
+
+### Praktikum 6
+
+#### Langkah 1
+
+- Tambahkan plugin geolocator dengan mengetik perintah berikut di terminal.
+
+```dart
+flutter pub add geolocator
+```
+
+#### langkah 2
+
+- Jika Anda menargetkan untuk platform Android, maka tambahkan baris kode berikut di file android/app/src/main/androidmanifest.xml
+
+```dart
+<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+```
+
+#### Langkah 3
+
+- Tambahkan file geolocation.dart ini di folder lib project Anda.
+
+#### Langkah 4
+
+- Buat class LocationScreen di dalam file geolocation.dart
+
+```dart
+import 'package:geolocator/geolocator.dart';
+import 'package:flutter/material.dart';
+
+class LocationScreen extends StatefulWidget {
+  const LocationScreen({super.key});
+
+  @override
+  State<LocationScreen> createState() => _LocationScreenState();
+}
+
+class _LocationScreenState extends State<LocationScreen> {
+  String myPosition = '';
+
+  void initState() {
+    super.initState();
+    getPosition().then((Position myPos) {
+      myPosition = 'Lat: ${myPos.latitude.toString()} - Longitude: ${myPos.longitude.toString()}';
+      setState(() {
+        myPosition = myPosition;
+      });
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Lokasi Aryok sekarang'),
+      ),
+      body: Center(
+        child: Text(myPosition),
+      ),
+    );
+  }
+
+  Future<Position> getPosition() async {
+    await Geolocator.requestPermission();
+    await Geolocator.isLocationServiceEnabled();
+    Position? position = await Geolocator.getCurrentPosition();
+
+    return position;
+  }
+}
+```
+
+#### Langkah 5
+
+- Panggil screen baru tersebut di file main Anda seperti berikut.
+
+```dart
+home: LocationScreen(),
+```
+
+#### Langkah 7
+
+- Run project Anda di device atau emulator (bukan browser), maka akan tampil seperti berikut ini.
+
+![alt text](image-7.png)
+
+- Pertanyaan 
+
+- Apakah Anda mendapatkan koordinat GPS ketika run di browser? Mengapa demikian?
+
+- Tidak, karena fungsi GPS memerlukan perangkat keras perangkat dan tidak tersedia di browser.
+
+![alt text](gif3.gif)
+
+
