@@ -8,7 +8,7 @@ class NavigationSecond extends StatefulWidget {
 }
 
 class _NavigationSecondState extends State<NavigationSecond> {
-  Color color = Colors.blue;
+  Color color = const Color.fromARGB(255, 4, 40, 77);
 
   @override
   Widget build(BuildContext context) {

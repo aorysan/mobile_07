@@ -10,7 +10,7 @@
 
 - Kemudian Tambahkan dependensi http dengan mengetik perintah berikut di terminal.
 
-``` dart
+```dart
 flutter pub add http
 ```
 
@@ -18,7 +18,7 @@ flutter pub add http
 
 - Jika berhasil install plugin, pastikan plugin http telah ada di file pubspec ini seperti berikut.
 
-``` dart
+```dart
 dependencies:
   flutter:
     sdk: flutter
@@ -29,7 +29,7 @@ dependencies:
 
 - Ketiklah kode seperti berikut ini.
 
-``` dart
+```dart
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
@@ -91,9 +91,9 @@ class _FuturePageState extends State<FuturePage> {
 
 #### Langkah 4
 
-- Tambahkan method ini ke dalam class _FuturePageState yang berguna untuk mengambil data dari API Google Books.
+- Tambahkan method ini ke dalam class \_FuturePageState yang berguna untuk mengambil data dari API Google Books.
 
-``` dart
+```dart
   Future<Response> getData() async {
     const authority = 'www.googleapis.com';
     const path = '/books/v1/volumes/MbOkkqDEJbkC';
@@ -109,7 +109,7 @@ class _FuturePageState extends State<FuturePage> {
 
 - Tambahkan kode pada onPressed di ElevatedButton seperti berikut.
 
-``` dart
+```dart
             ElevatedButton(child: const Text('GO!'), onPressed: () {
               setState(() {
                 result = 'Loading...';
@@ -143,9 +143,9 @@ class _FuturePageState extends State<FuturePage> {
 
 #### Langkah 1
 
-- Tambahkan tiga method berisi kode seperti berikut di dalam class _FuturePageState.
+- Tambahkan tiga method berisi kode seperti berikut di dalam class \_FuturePageState.
 
-``` dart
+```dart
 Future<int> returnOneAsync() async {
   await Future.delayed(const Duration(seconds: 3));
   return 1;
@@ -166,7 +166,7 @@ Future<int> returnThreeAsync() async {
 
 - Lalu tambahkan lagi method ini di bawah ketiga method sebelumnya.
 
-``` dart
+```dart
   Future count () async {
     int total = 0;
     total = await returnOneAsync();
@@ -183,7 +183,7 @@ Future<int> returnThreeAsync() async {
 
 - Lakukan comment kode sebelumnya, ubah isi kode onPressed() menjadi seperti berikut.
 
-``` dart
+```dart
 onPressed: () {
     count();
 ```
@@ -202,15 +202,15 @@ onPressed: () {
 
 - Pastikan telah impor package async berikut.
 
-``` dart
+```dart
 import 'package:async/async.dart';
 ```
 
 #### Langkah 2
 
-- Tambahkan variabel late dan method di class _FuturePageState seperti ini.
+- Tambahkan variabel late dan method di class \_FuturePageState seperti ini.
 
-``` dart
+```dart
 late Completer completer;
 
 Future getNumber() {
@@ -229,9 +229,7 @@ Future calculate() async {
 
 - Tambahkan kode berikut pada fungsi onPressed(). Kode sebelumnya bisa Anda comment.
 
-
-
-``` dart
+```dart
 getNumber().then((value) {
     setState(() {
     result = value.toString();
@@ -245,7 +243,7 @@ getNumber().then((value) {
 
 ![alt text](image-3.png)
 
-![alt text](<gif.gif>)
+![alt text](gif.gif)
 
 - Penjelasan
 
@@ -260,7 +258,7 @@ getNumber().then((value) {
 
 - Gantilah isi code method calculate() seperti kode berikut, atau Anda dapat membuat calculate2()
 
-``` dart
+```dart
   calculate() async {
     try {
       await new Future.delayed(const Duration(seconds: 5));
@@ -275,7 +273,7 @@ getNumber().then((value) {
 
 - Ganti menjadi kode seperti berikut.
 
-``` dart
+```dart
 getNumber().then((value) {
   setState(() {
     result = value.toString();
@@ -299,9 +297,9 @@ getNumber().then((value) {
 
 #### Langkah 1
 
-- Tambahkan method ini ke dalam class _FuturePageState
+- Tambahkan method ini ke dalam class \_FuturePageState
 
-``` dart
+```dart
   void returnFG() {
     FutureGroup<int> futureGroup = FutureGroup<int>();
     futureGroup.add(returnOneAsync());
@@ -325,7 +323,7 @@ getNumber().then((value) {
 
 - Anda bisa hapus atau comment kode sebelumnya, kemudian panggil method dari langkah 1 tersebut.
 
-``` dart
+```dart
 returnFG();
 ```
 
@@ -333,13 +331,13 @@ returnFG();
 
 - Anda akan melihat hasilnya dalam 3 detik berupa angka 6 lebih cepat dibandingkan praktikum sebelumnya menunggu sampai 9 detik.
 
-![alt text](<gif1.gif>)
+![alt text](gif1.gif)
 
 #### Langkah 4
 
 - Anda dapat menggunakan FutureGroup dengan Future.wait seperti kode berikut.
 
-``` dart
+```dart
 final futures = Future.wait<int>([
     returnOneAsync(),
     returnTwoAsync(),
@@ -347,7 +345,7 @@ final futures = Future.wait<int>([
 ]);
 ```
 
-- Penjelasan 
+- Penjelasan
 
 | Aspek                          | `Future.wait()`              | `FutureGroup`                       |
 | ------------------------------ | ---------------------------- | ----------------------------------- |
@@ -362,9 +360,9 @@ final futures = Future.wait<int>([
 
 #### Langkah 1
 
-- Tambahkan method ini ke dalam class _FuturePageState
+- Tambahkan method ini ke dalam class \_FuturePageState
 
-``` dart
+```dart
   Future returnError() async {
     await Future.delayed(const Duration(seconds: 2));
     throw Exception('Error walaw e!');
@@ -375,7 +373,7 @@ final futures = Future.wait<int>([
 
 - Ganti dengan kode berikut
 
-``` dart
+```dart
 returnError()
     .then((value) {
         setState(() {
@@ -398,13 +396,13 @@ returnError()
 
 ![alt text](image-5.png)
 
-![alt text](<gif2.gif>)
+![alt text](gif2.gif)
 
 #### Langkah 4
 
-- Tambahkan kode ini di dalam class _FutureStatePage
+- Tambahkan kode ini di dalam class \_FutureStatePage
 
-``` dart
+```dart
   Future handleError() async {
     try {
       await returnError();
@@ -422,7 +420,7 @@ returnError()
 
 ![alt text](image-8.png)
 
-- Penjelasan 
+- Penjelasan
 
 | Aspek                | `returnError()`               | `handleError()`                               |
 | -------------------- | ----------------------------- | --------------------------------------------- |
@@ -519,7 +517,7 @@ home: LocationScreen(),
 
 ![alt text](image-7.png)
 
-- Pertanyaan 
+- Pertanyaan
 
 - Apakah Anda mendapatkan koordinat GPS ketika run di browser? Mengapa demikian?
 
@@ -539,7 +537,7 @@ home: LocationScreen(),
 
 #### Langkah 2
 
-- Tambah variabel ini di class _LocationScreenState
+- Tambah variabel ini di class \_LocationScreenState
 
 ```dart
   Future<Position>? position;
@@ -729,10 +727,113 @@ home: const NavigationFirst(),
 
 - Lakukan run, jika terjadi error silakan diperbaiki.
 
-- Pertanyaan
-
-- Cobalah klik setiap button, apa yang terjadi ? Mengapa demikian ?
+- Pertanyaan: Cobalah klik setiap button, apa yang terjadi ? Mengapa demikian ?
 
 - Warna background akan berubah sesuai dengan tombol yang telah dipilih dan ditekan.
 
 ![alt text](<WhatsApp Video 2025-11-10 at 11.50.01_4a68e400.gif>)
+
+### Praktikum 9
+
+#### Langkah 1
+
+- Buat file dart baru di folder lib project Anda.
+
+#### Langkah 2
+
+```dart
+import 'package:flutter/material.dart';
+
+class NavigationDialogScreen extends StatefulWidget {
+  const NavigationDialogScreen({super.key});
+
+  @override
+  State<NavigationDialogScreen> createState() => _NavigationDialogScreenState();
+}
+
+class _NavigationDialogScreenState extends State<NavigationDialogScreen> {
+  Color color = Colors.blue.shade700;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: color,
+      appBar: AppBar(title: const Text('Navigation Dialog Screen')),
+      body: Center(
+        child: ElevatedButton(
+          child: const Text('Change Color'),
+          onPressed: () {
+            _showColorDialog(context);
+          },
+        ),
+      ),
+    );
+  }
+```
+
+#### Langkah 3
+
+```dart
+  _showColorDialog(BuildContext context) async {
+    await showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (_) {
+        return AlertDialog(
+          title: const Text('Very important question'),
+          content: const Text('Please choose a color'),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('Red'),
+              onPressed: () {
+                color = Colors.red.shade700;
+                Navigator.pop(context, color);
+              },
+            ),
+            TextButton(
+              child: const Text('Green'),
+              onPressed: () {
+                color = Colors.green.shade700;
+                Navigator.pop(context, color);
+              },
+            ),
+            TextButton(
+              child: const Text('Blue'),
+              onPressed: () {
+                color = Colors.blue.shade700;
+                Navigator.pop(context, color);
+              },
+            ),
+          ],
+        );
+      },
+    );
+    setState(() {});
+  }
+}
+```
+#### Langkah 4
+
+```dart
+    onPressed: () {
+      _showColorDialog(context);
+    },
+```
+
+#### Langkah 5
+
+- Ubah properti home
+
+```dart
+  home: const NavigationDialog(),
+```
+
+#### Langkah 6
+
+- Coba ganti warna background dengan widget dialog tersebut. Jika terjadi error, silakan diperbaiki. Jika berhasil, akan tampil seperti gambar berikut.
+
+- Pertanyaan: Cobalah klik setiap button, apa yang terjadi ? Mengapa demikian ?
+
+- Warna background akan berubah sesuai dengan tombol yang telah dipilih dan ditekan.
+
+![alt text](<WhatsApp Video 2025-11-10 at 12.26.24_418eed82.gif>)
