@@ -103,7 +103,7 @@ class _FuturePageState extends State<FuturePage> {
   }
 ```
 
-![alt text](image.png)
+![alt text](imgNGif/image.png)
 
 #### Langkah 5
 
@@ -130,7 +130,7 @@ class _FuturePageState extends State<FuturePage> {
 
 - Lakukan run aplikasi Flutter Anda. Anda akan melihat tampilan akhir seperti gambar berikut. Jika masih terdapat error, silakan diperbaiki hingga bisa running.
 
-![alt text](image-1.png)
+![alt text](imgNGif/image-1.png)
 
 - Penjelasan
 
@@ -192,7 +192,7 @@ onPressed: () {
 
 - Akhirnya, run atau tekan F5 jika aplikasi belum running. Maka Anda akan melihat seperti gambar berikut, hasil angka 6 akan tampil setelah delay 9 detik.
 
-![alt text](image-2.png)
+![alt text](imgNGif/image-2.png)
 
 - Kode dari langkah 1 dan 2 diatas yaitu untuk menambah jumlah nilai dari total pada setiap delay 3 detik yang mana pada tiap delay memiliki nilai yang berbeda untuk ditambahkan pada total.
 
@@ -241,9 +241,9 @@ getNumber().then((value) {
 
 - Terakhir, run atau tekan F5 untuk melihat hasilnya jika memang belum running. Bisa juga lakukan hot restart jika aplikasi sudah running. Maka hasilnya akan seperti gambar berikut ini. Setelah 5 detik, maka angka 42 akan tampil.
 
-![alt text](image-3.png)
+![alt text](imgNGif/image-3.png)
 
-![alt text](gif.gif)
+![alt text](imgNGif/gif.gif)
 
 - Penjelasan
 
@@ -331,7 +331,7 @@ returnFG();
 
 - Anda akan melihat hasilnya dalam 3 detik berupa angka 6 lebih cepat dibandingkan praktikum sebelumnya menunggu sampai 9 detik.
 
-![alt text](gif1.gif)
+![alt text](imgNGif/gif1.gif)
 
 #### Langkah 4
 
@@ -392,11 +392,11 @@ returnError()
 
 - Lakukan run dan klik tombol GO! maka akan menghasilkan seperti gambar berikut.
 
-![alt text](image-4.png)
+![alt text](imgNGif/image-4.png)
 
-![alt text](image-5.png)
+![alt text](imgNGif/image-5.png)
 
-![alt text](gif2.gif)
+![alt text](imgNGif/gif2.gif)
 
 #### Langkah 4
 
@@ -416,9 +416,9 @@ returnError()
   }
 ```
 
-![alt text](image-6.png)
+![alt text](imgNGif/image-6.png)
 
-![alt text](image-8.png)
+![alt text](imgNGif/image-8.png)
 
 - Penjelasan
 
@@ -515,7 +515,7 @@ home: LocationScreen(),
 
 - Run project Anda di device atau emulator (bukan browser), maka akan tampil seperti berikut ini.
 
-![alt text](image-7.png)
+![alt text](imgNGif/image-7.png)
 
 - Pertanyaan
 
@@ -523,7 +523,7 @@ home: LocationScreen(),
 
 - Tidak, karena fungsi GPS memerlukan perangkat keras perangkat dan tidak tersedia di browser.
 
-![alt text](gif3.gif)
+![alt text](imgNGif/gif3.gif)
 
 ### Praktikum 7
 
@@ -586,7 +586,7 @@ void initState() {
 
 - Tidak Karena yang diubah adalah cara loadingnya yang melakukan delay sebelum memunculkan lokasi.
 
-![alt text](<WhatsApp Video 2025-11-10 at 11.13.44_b718047c.gif>)
+![alt text](<imgNGif/gif4.gif>)
 
 #### Langkah 5
 
@@ -605,7 +605,7 @@ else if (snapshot.connectionState == ConnectionState.done) {
 
 - Tidak karena hanya merubah cara penanganan jika terjadi error
 
-![alt text](<WhatsApp Video 2025-11-10 at 11.23.20_fd557055.gif>)
+![alt text](<imgNGif/gif5.gif>)
 
 ### Praktikum 8
 
@@ -731,7 +731,7 @@ home: const NavigationFirst(),
 
 - Warna background akan berubah sesuai dengan tombol yang telah dipilih dan ditekan.
 
-![alt text](<WhatsApp Video 2025-11-10 at 11.50.01_4a68e400.gif>)
+![alt text](<imgNGif/gif6.gif>)
 
 ### Praktikum 9
 
@@ -836,4 +836,4 @@ class _NavigationDialogScreenState extends State<NavigationDialogScreen> {
 
 - Warna background akan berubah sesuai dengan tombol yang telah dipilih dan ditekan.
 
-![alt text](<WhatsApp Video 2025-11-10 at 12.26.24_418eed82.gif>)
+![alt text](<imgNGif/gif7.gif>)
