@@ -609,3 +609,130 @@ else if (snapshot.connectionState == ConnectionState.done) {
 
 ![alt text](<WhatsApp Video 2025-11-10 at 11.23.20_fd557055.gif>)
 
+### Praktikum 8
+
+#### langkah 1
+
+- Buatlah file baru ini di project lib Anda.
+
+#### Langkah 2
+
+```dart
+import 'package:flutter/material.dart';
+
+class NavigationFirst extends StatefulWidget {
+  const NavigationFirst({super.key});
+
+  @override
+  State<NavigationFirst> createState() => _NavigationFirstState();
+}
+
+class _NavigationFirstState extends State<NavigationFirst> {
+  Color color = const Color.fromARGB(255, 6, 35, 64);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: color,
+      appBar: AppBar(title: const Text('Navigation First Screen')),
+      body: Center(
+        child: ElevatedButton(
+          child: const Text('Ganti warna Aryok'),
+          onPressed: () {
+            _navigateAndGetColor(context);
+          },
+        ),
+      ),
+    );
+  }
+}
+```
+
+#### Langkah 3
+
+- Tambahkan method ini.
+
+```dart
+Future _navigateAndGetColor(BuildContext context) async {
+   color = await Navigator.push(context,
+        MaterialPageRoute(builder: (context) => const NavigationSecond()),) ?? Colors.blue;
+   setState(() {});
+   });
+}
+```
+
+#### Langkah 4
+
+- Buat file baru ini di project lib Anda. Silakan jika ingin mengelompokkan view menjadi satu folder dan sesuaikan impor yang dibutuhkan.
+
+#### Langkah 5
+
+```dart
+import 'package:flutter/material.dart';
+
+class NavigationSecond extends StatefulWidget {
+  const NavigationSecond({super.key});
+
+  @override
+  State<NavigationSecond> createState() => _NavigationSecondState();
+}
+
+class _NavigationSecondState extends State<NavigationSecond> {
+  Color color = Colors.blue;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('Navigation Aryok 2')),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            ElevatedButton(
+              child: const Text('Blue'),
+              onPressed: () {
+                color = const Color.fromARGB(255, 0, 170, 255);
+                Navigator.pop(context, color);
+              },
+            ),
+            ElevatedButton(
+              child: const Text('Grey'),
+              onPressed: () {
+                color = const Color.fromARGB(255, 114, 114, 114);
+                Navigator.pop(context, color);
+              },
+            ),
+            ElevatedButton(
+              child: const Text('Black'),
+              onPressed: () {
+                color = const Color.fromARGB(255, 0, 0, 0);
+                Navigator.pop(context, color);
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+```
+
+#### Langkah 6
+
+- Lakukan edit properti home.
+
+```dart
+home: const NavigationFirst(),
+```
+
+#### Langkah 7
+
+- Lakukan run, jika terjadi error silakan diperbaiki.
+
+- Pertanyaan
+
+- Cobalah klik setiap button, apa yang terjadi ? Mengapa demikian ?
+
+- Warna background akan berubah sesuai dengan tombol yang telah dipilih dan ditekan.
+
+![alt text](<WhatsApp Video 2025-11-10 at 11.50.01_4a68e400.gif>)
