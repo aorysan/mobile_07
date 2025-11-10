@@ -589,3 +589,23 @@ void initState() {
 - Tidak Karena yang diubah adalah cara loadingnya yang melakukan delay sebelum memunculkan lokasi.
 
 ![alt text](<WhatsApp Video 2025-11-10 at 11.13.44_b718047c.gif>)
+
+#### Langkah 5
+
+- Tambahkan kode berikut untuk menangani ketika terjadi error. Kemudian hot restart.
+
+```dart
+else if (snapshot.connectionState == ConnectionState.done) {
+  if (snapshot.hasError) {
+     return Text('Something terrible happened!');
+  }
+  return Text(snapshot.data.toString());
+}
+```
+
+- Pertanyaan: Apakah ada perbedaan UI dengan langkah sebelumnya? Mengapa demikian?
+
+- Tidak karena hanya merubah cara penanganan jika terjadi error
+
+![alt text](<WhatsApp Video 2025-11-10 at 11.23.20_fd557055.gif>)
+
