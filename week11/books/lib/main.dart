@@ -3,7 +3,7 @@
 // import 'package:http/http.dart';
 // import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
-import 'geolocation.dart';
+import 'package:geolocator/geolocator.dart';
 
 void main() {
   runApp(const MyApp());
@@ -11,16 +11,6 @@ void main() {
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
-
-  Future<Map<String, double>> getLocation() async {
-    // Ganti dengan pemanggilan fungsi lokasi asli jika ada di geolocation.dart
-    // Contoh: return await Geolocation.getCurrentPosition();
-    await Future.delayed(const Duration(seconds: 5));
-    // Contoh data mock
-    double latitude = -6.200000;
-    double longitude = 106.816666;
-    return {'latitude': latitude, 'longitude': longitude};
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -30,31 +20,51 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: Scaffold(
-        appBar: AppBar(title: const Text('Lokasi Aryok sekarang')),
-        body: Center(
-          child: FutureBuilder<Map<String, double>>(
-            future: getLocation(),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return const CircularProgressIndicator();
-              } else if (snapshot.hasError) {
-                return Text('Error: \\${snapshot.error}');
-              } else if (snapshot.hasData) {
-                final lat = snapshot.data?['latitude'];
-                final lon = snapshot.data?['longitude'];
-                return Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text('Latitude: \\${lat ?? '-'}'),
-                    Text('Longitude: \\${lon ?? '-'}'),
-                  ],
-                );
-              } else {
-                return const Text('Tidak ada lokasi');
-              }
-            },
-          ),
+      home: const LocationScreen(),
+    );
+  }
+}
+
+class LocationScreen extends StatefulWidget {
+  const LocationScreen({super.key});
+
+  @override
+  State<LocationScreen> createState() => _LocationScreenState();
+}
+
+class _LocationScreenState extends State<LocationScreen> {
+  Future<Position>? position;
+
+  @override
+  void initState() {
+    super.initState();
+    position = getPosition();
+  }
+
+  Future<Position> getPosition() async {
+    await Geolocator.requestPermission();
+    await Geolocator.isLocationServiceEnabled();
+    await Future.delayed(const Duration(seconds: 3));
+    Position position = await Geolocator.getCurrentPosition();
+    return position;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('Current Location')),
+      body: Center(
+        child: FutureBuilder<Position>(
+          future: position,
+          builder: (BuildContext context, AsyncSnapshot<Position> snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const CircularProgressIndicator();
+            } else if (snapshot.connectionState == ConnectionState.done) {
+              return Text(snapshot.data.toString());
+            } else {
+              return const Text('');
+            }
+          },
         ),
       ),
     );

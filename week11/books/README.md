@@ -527,4 +527,65 @@ home: LocationScreen(),
 
 ![alt text](gif3.gif)
 
+### Praktikum 7
 
+#### Langkah 1
+
+- Buka file geolocation.dart kemudian ganti isi method dengan kode ini.
+
+```dart
+    await Future.delayed(const Duration(seconds: 3));
+```
+
+#### Langkah 2
+
+- Tambah variabel ini di class _LocationScreenState
+
+```dart
+  Future<Position>? position;
+```
+
+#### Langkah 3
+
+- Tambah method ini dan set variabel position
+
+```dart
+void initState() {
+  super.initState();
+  position = getPosition();
+}
+```
+
+#### Langkah 4
+
+- Ketik kode berikut dan sesuaikan. Kode lama bisa Anda comment atau hapus.
+
+```dart
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('Current Location')),
+      body: Center(
+        child: FutureBuilder<Position>(
+          future: position,
+          builder: (BuildContext context, AsyncSnapshot<Position> snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const CircularProgressIndicator();
+            } else if (snapshot.connectionState == ConnectionState.done) {
+              return Text(snapshot.data.toString());
+            } else {
+              return const Text('');
+            }
+          },
+        ),
+      ),
+    );
+  }
+}
+```
+
+- Pertanyaan: Apakah ada perbedaan UI dengan praktikum sebelumnya? Mengapa demikian?
+
+- Tidak Karena yang diubah adalah cara loadingnya yang melakukan delay sebelum memunculkan lokasi.
+
+![alt text](<WhatsApp Video 2025-11-10 at 11.13.44_b718047c.gif>)
