@@ -133,3 +133,84 @@ yield* Stream.periodic(
 - **Apa maksud isi perintah kode tersebut?**
   
   Kode tersebut membuat Stream yang mengirimkan warna secara periodik setiap 1 detik. `Stream.periodic` menghasilkan event setiap detik dengan nilai integer `t` yang increment. Nilai `t` kemudian digunakan untuk menentukan index warna dengan operasi modulo `t % colors.length`, sehingga warna akan berputar secara berulang dari list colors.
+
+#### Langkah 7: Buka `main.dart`
+- Ketik kode impor file ini pada file `main.dart`
+
+```dart
+import 'stream.dart';
+```
+
+#### Langkah 8: Tambah variabel
+- Ketik dua properti ini di dalam `class _StreamHomePageState`
+
+```dart
+Color bgColor = Colors.blueGrey;
+late ColorStream colorStream;
+```
+
+#### Langkah 9: Tambah method `changeColor()`
+- Tetap di file main, Ketik kode seperti berikut
+
+```dart
+void changeColor() async {
+  await for (var eventColor in colorStream.getColors()) {
+    setState(() {
+      bgColor = eventColor;
+    });
+  }
+}
+```
+
+#### Langkah 10: Lakukan override `initState()`
+- Ketik kode seperti berikut
+
+```dart
+@override
+void initState() {
+  super.initState();
+  colorStream = ColorStream();
+  changeColor();
+}
+```
+
+#### Langkah 11: Ubah isi `Scaffold()`
+- Sesuaikan kode seperti berikut.
+
+```dart
+@override
+Widget build(BuildContext context) {
+  return Scaffold(
+    appBar: AppBar(
+      title: const Text('Stream - Aryok'),
+    ),
+    body: Container(
+      decoration: BoxDecoration(color: bgColor),
+    ),
+  );
+}
+```
+
+#### Langkah 12: Run
+- Lakukan running pada aplikasi Flutter Anda, maka akan terlihat berubah warna background setiap detik.
+
+##### Soal 4
+- **Capture hasil praktikum Anda berupa GIF dan lampirkan di README.**
+
+![alt text](gif.gif)
+
+Aplikasi berhasil menampilkan perubahan warna background secara otomatis setiap 1 detik menggunakan Stream dengan metode `await for`.
+
+#### Langkah 13: Ganti isi method `changeColor()`
+- Anda boleh comment atau hapus kode sebelumnya, lalu ketik kode seperti berikut.
+
+```dart
+void changeColor() async {
+  colorStream.getColors().listen((eventColor) {
+    setState(() {
+      bgColor = eventColor;
+    });
+  });
+}
+```
+
