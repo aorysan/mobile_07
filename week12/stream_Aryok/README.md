@@ -984,3 +984,222 @@ StreamBuilder(
 ![alt text](gif5.gif)
 
 ---
+
+### Praktikum 7: BLoC Pattern
+
+BLoC (Business Logic Component) adalah pola arsitektur yang memisahkan logika bisnis dari UI. BLoC menerima stream data dari sumbernya, memproses sesuai logika bisnis, dan mengembalikan stream data ke subscriber.
+
+**Konsep BLoC:**
+- **Input**: Events (user actions) masuk melalui Sink
+- **Process**: BLoC memproses events dengan business logic
+- **Output**: Data keluar melalui Stream ke UI
+
+#### Langkah 1: Buat Project baru
+- Buatlah sebuah project flutter baru dengan nama **bloc_random_aryok** di folder **week-12/src/** repository GitHub Anda. 
+- Buat file baru di folder `lib` dengan nama `random_bloc.dart`
+- **Catatan:** Pada praktikum ini, kita tetap menggunakan project yang sama.
+
+#### Langkah 2: Isi kode random_bloc.dart
+- Ketik kode impor berikut ini.
+
+```dart
+import 'dart:async';
+import 'dart:math';
+```
+
+#### Langkah 3: Buat class RandomNumberBloc()
+```dart
+class RandomNumberBloc {}
+```
+
+#### Langkah 4: Buat variabel StreamController
+- Di dalam `class RandomNumberBloc()` ketik variabel berikut ini
+
+```dart
+// StreamController untuk input events
+final _generateRandomController = StreamController<void>();
+// StreamController untuk output data
+final _randomNumberController = StreamController<int>();
+
+// Sink untuk input (memasukkan event)
+Sink<void> get generateRandom => _generateRandomController.sink;
+// Stream untuk output (mengeluarkan data)
+Stream<int> get randomNumber => _randomNumberController.stream;
+```
+
+#### Langkah 5: Buat constructor
+```dart
+RandomNumberBloc() {
+  _generateRandomController.stream.listen((_) {
+    final random = Random().nextInt(10);
+    _randomNumberController.sink.add(random);
+  });
+}
+```
+
+#### Langkah 6: Buat method dispose()
+```dart
+void dispose() {
+  _generateRandomController.close();
+  _randomNumberController.close();
+}
+```
+
+#### Langkah 7: Edit main.dart
+```dart
+import 'package:flutter/material.dart';
+import 'random_screen.dart';
+
+void main() {
+  runApp(const MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Stream - Aryok',
+      theme: ThemeData(primarySwatch: Colors.deepPurple),
+      home: const RandomScreen(),
+    );
+  }
+}
+```
+
+#### Langkah 8: Buat file baru random_screen.dart
+- Di dalam folder `lib` project Anda, buatlah file baru ini.
+
+#### Langkah 9: Lakukan impor material dan random_bloc.dart
+- Ketik kode ini di file baru `random_screen.dart`
+
+```dart
+import 'package:flutter/material.dart';
+import 'random_bloc.dart';
+```
+
+#### Langkah 10: Buat StatefulWidget RandomScreen
+```dart
+class RandomScreen extends StatefulWidget {
+  const RandomScreen({super.key});
+
+  @override
+  State<RandomScreen> createState() => _RandomScreenState();
+}
+```
+
+#### Langkah 11: Buat variabel
+- Ketik kode ini di dalam `class _RandomScreenState`
+
+```dart
+final _bloc = RandomNumberBloc();
+```
+
+#### Langkah 12: Buat method dispose()
+```dart
+@override
+void dispose() {
+  _bloc.dispose();
+  super.dispose();
+}
+```
+
+#### Langkah 13: Edit method build()
+```dart
+@override
+Widget build(BuildContext context) {
+  return Scaffold(
+    appBar: AppBar(title: const Text('Random Number - Aryok')),
+    body: Center(
+      child: StreamBuilder<int>(
+        stream: _bloc.randomNumber,
+        initialData: 0,
+        builder: (context, snapshot) {
+          return Text(
+            'Random Number: ${snapshot.data}',
+            style: const TextStyle(fontSize: 24),
+          );
+        },
+      ),
+    ),
+    floatingActionButton: FloatingActionButton(
+      onPressed: () => _bloc.generateRandom.add(null),
+      child: const Icon(Icons.refresh),
+    ),
+  );
+}
+```
+
+##### Soal 13
+- **Jelaskan maksud praktikum ini! Dimanakah letak konsep pola BLoC-nya?**
+
+**Maksud Praktikum:**
+Praktikum ini mengimplementasikan pola BLoC (Business Logic Component) untuk memisahkan logika bisnis dari UI. Aplikasi menampilkan angka random (0-9) yang di-generate setiap kali user menekan FloatingActionButton.
+
+**Letak Konsep Pola BLoC:**
+
+**1. Separation of Concerns (Pemisahan Tanggung Jawab):**
+- **random_bloc.dart**: Berisi semua logika bisnis (generate random number)
+- **random_screen.dart**: Hanya menampilkan UI, tidak ada logika bisnis
+
+**2. Stream-based Communication:**
+
+**Input Stream (Events):**
+```dart
+final _generateRandomController = StreamController<void>();
+Sink<void> get generateRandom => _generateRandomController.sink;
+```
+- User action (tap button) → masuk ke Sink
+- Sink adalah "pintu masuk" untuk events
+
+**Business Logic (Processing):**
+```dart
+RandomNumberBloc() {
+  _generateRandomController.stream.listen((_) {
+    final random = Random().nextInt(10);
+    _randomNumberController.sink.add(random);
+  });
+}
+```
+- Listen ke input stream
+- Proses: generate random number
+- Kirim hasil ke output stream
+
+**Output Stream (Data):**
+```dart
+final _randomNumberController = StreamController<int>();
+Stream<int> get randomNumber => _randomNumberController.stream;
+```
+- Stream adalah "pintu keluar" untuk data
+- UI listen ke stream ini via StreamBuilder
+
+**3. Alur BLoC Pattern:**
+```
+User Tap Button 
+    → Event masuk ke Sink (_bloc.generateRandom.add(null))
+    → BLoC listen event dari input stream
+    → BLoC proses (generate random number)
+    → BLoC kirim hasil ke output stream via Sink
+    → StreamBuilder listen output stream
+    → UI rebuild dengan data baru
+```
+
+**4. Keuntungan BLoC:**
+- ✅ **Testable**: Logic terpisah, mudah di-test tanpa UI
+- ✅ **Reusable**: BLoC bisa dipakai di multiple screens
+- ✅ **Maintainable**: Perubahan logic tidak affect UI
+- ✅ **Scalable**: Mudah dikembangkan untuk app kompleks
+
+**Perbedaan dengan Praktikum Sebelumnya:**
+
+| Aspek | Praktikum 6 (StreamBuilder) | Praktikum 7 (BLoC) |
+|-------|----------------------------|-------------------|
+| Logic Location | Di dalam Widget State | Terpisah di BLoC class |
+| Stream Creation | Langsung dari NumberStream | Melalui BLoC (input/output) |
+| User Interaction | Tidak ada | Ada (button trigger event) |
+| Pattern | Simple reactive UI | Full BLoC architecture |
+
+![alt text](gif6.gif)
+
+---
