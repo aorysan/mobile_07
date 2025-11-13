@@ -68,3 +68,39 @@ class ColorStream {
   
 }
 ```
+
+#### Langkah 4: Tambah variabel colors
+- Tambahkan variabel di dalam class `ColorStream` seperti berikut.
+
+```dart
+import 'package:flutter/material.dart';
+
+class ColorStream {
+  final List<Color> colors = [
+    Colors.blueGrey,
+    Colors.amber,
+    Colors.deepPurple,
+    Colors.lightBlue,
+    Colors.teal,
+  ];
+}
+```
+
+##### Soal 2
+- **Tambahkan 5 warna lainnya sesuai keinginan Anda pada variabel `colors` tersebut.**
+- Telah ditambahkan 5 warna lainnya: `Colors.pink`, `Colors.indigo`, `Colors.orange`, `Colors.cyan`, `Colors.lime`
+
+```dart
+final List<Color> colors = [
+  Colors.blueGrey,
+  Colors.amber,
+  Colors.deepPurple,
+  Colors.lightBlue,
+  Colors.teal,
+  Colors.pink,
+  Colors.indigo,
+  Colors.orange,
+  Colors.cyan,
+  Colors.lime,
+];
+```
