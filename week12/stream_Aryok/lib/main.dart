@@ -35,6 +35,8 @@ class _StreamHomePageState extends State<StreamHomePage> {
   late NumberStream numberStream;
   late StreamTransformer transformer;
   late StreamSubscription subscription;
+  late StreamSubscription subscription2;
+  String values = '';
 
   void changeColor() async {
     colorStream.getColors().listen((eventColor) {
@@ -49,7 +51,7 @@ class _StreamHomePageState extends State<StreamHomePage> {
     super.initState();
     numberStream = NumberStream();
     numberStreamController = numberStream.controller;
-    Stream stream = numberStreamController.stream;
+    Stream stream = numberStreamController.stream.asBroadcastStream();
 
     transformer = StreamTransformer<int, int>.fromHandlers(
       handleData: (value, sink) {
@@ -78,11 +80,18 @@ class _StreamHomePageState extends State<StreamHomePage> {
             print('OnDone was called');
           },
         );
+
+    subscription2 = stream.listen((event) {
+      setState(() {
+        values += '$event - ';
+      });
+    });
   }
 
   @override
   void dispose() {
     subscription.cancel();
+    subscription2.cancel();
     numberStreamController.close();
     super.dispose();
   }
@@ -123,6 +132,7 @@ class _StreamHomePageState extends State<StreamHomePage> {
               onPressed: () => stopStream(),
               child: const Text('Stop Subscription'),
             ),
+            Text(values),
           ],
         ),
       ),

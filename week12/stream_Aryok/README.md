@@ -711,3 +711,99 @@ Ini mencegah error saat mencoba mengirim data ke stream yang sudah ditutup.
 ![alt text](gif3.gif)
 
 ---
+
+### Praktikum 5: Multiple stream subscriptions
+
+Secara default, stream hanya bisa digunakan untuk satu subscription. Jika mencoba melakukan subscription yang sama lebih dari satu, maka akan terjadi error. Untuk menangani hal itu, tersedia broadcast stream yang dapat digunakan untuk multiple subscriptions.
+
+#### Langkah 1: Buka file main.dart
+- Ketik variabel berikut di `class _StreamHomePageState`
+
+```dart
+late StreamSubscription subscription2;
+String values = '';
+```
+
+#### Langkah 2: Edit initState()
+- Ketik kode seperti berikut.
+
+```dart
+subscription2 = stream.listen((event) {
+  setState(() {
+    values += '$event - ';
+  });
+});
+```
+
+#### Langkah 3: Run
+- Lakukan run maka akan tampil error seperti berikut:
+
+```
+Bad state: Stream has already been listened to.
+```
+
+##### Soal 10
+- **Jelaskan mengapa error itu bisa terjadi?**
+
+Error ini terjadi karena secara default, `StreamController` membuat stream yang bersifat **single-subscription**. Artinya, stream tersebut hanya bisa di-listen oleh satu subscriber saja. Ketika kita mencoba menambahkan listener kedua (`subscription2`), stream sudah memiliki listener pertama (`subscription`), sehingga Dart melemparkan error `Bad state: Stream has already been listened to`.
+
+**Penyebab:**
+- `subscription` sudah listen ke `stream`
+- `subscription2` mencoba listen ke `stream` yang sama
+- Stream single-subscription tidak mengizinkan multiple listeners
+- Error muncul karena pelanggaran aturan single-subscription
+
+#### Langkah 4: Set broadcast stream
+- Ketik kode seperti berikut di method `initState()`
+
+```dart
+Stream stream = numberStreamController.stream.asBroadcastStream();
+```
+
+#### Langkah 5: Edit method build()
+- Tambahkan text seperti berikut
+
+```dart
+Text(values),
+```
+
+Tambahkan di dalam children Column setelah button "Stop Subscription".
+
+#### Langkah 6: Run
+- Tekan button 'New Random Number' beberapa kali, maka akan tampil teks angka terus bertambah sebanyak dua kali.
+
+##### Soal 11
+- **Jelaskan mengapa hal itu bisa terjadi?**
+
+Hal ini terjadi karena kita telah mengubah stream menjadi **broadcast stream** menggunakan `asBroadcastStream()`. Broadcast stream memungkinkan multiple subscriptions pada stream yang sama.
+
+**Yang terjadi:**
+1. Button "New Random Number" ditekan → generate angka random (0-9)
+2. Angka dikirim ke stream melalui sink
+3. Stream meng-broadcast data ke semua subscriber
+
+**Dua subscription yang aktif:**
+- **subscription**: Menerima data yang sudah di-transform (dikali 10) → update `lastNumber` (0-90)
+- **subscription2**: Menerima data asli (tanpa transform) → menambahkan ke `values` (0-9)
+
+**Contoh:**
+- Generate: 5
+- subscription → transform: 5 × 10 = 50 → `lastNumber = 50`
+- subscription2 → original: 5 → `values += '5 - '`
+
+Jadi setiap kali button ditekan, `lastNumber` menampilkan hasil transformasi (0-90), sedangkan `values` menampilkan angka asli dalam bentuk string yang terakumulasi (0 - 5 - 3 - 7 - ...).
+
+**Perbedaan Stream:**
+
+| Aspek | Single-Subscription | Broadcast Stream |
+|-------|---------------------|------------------|
+| Jumlah Listener | Hanya 1 | Multiple (banyak) |
+| Method | `stream` | `stream.asBroadcastStream()` |
+| Use Case | Data sequence yang harus diproses sekali | Event yang perlu didengar banyak listener |
+| Error jika > 1 listener | Ya | Tidak |
+
+- **Capture hasil praktikum Anda berupa GIF dan lampirkan di README.**
+
+![alt text](gif4.gif)
+
+---
