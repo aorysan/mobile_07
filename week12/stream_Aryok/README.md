@@ -442,3 +442,93 @@ void addRandomNumber() {
   // numberStream.addError();
 }
 ```
+
+![Hasil Error Handling](docs/soal7.gif)
+
+---
+
+### Praktikum 3: Injeksi data ke streams
+
+Skenario yang umum dilakukan adalah melakukan manipulasi atau transformasi data stream sebelum sampai pada UI end user. Pada praktikum ini, kita akan menggunakan `StreamTransformers` untuk melakukan map dan filter data.
+
+#### Langkah 1: Buka main.dart
+- Tambahkan variabel baru di dalam `class _StreamHomePageState`
+
+```dart
+late StreamTransformer transformer;
+```
+
+#### Langkah 2: Tambahkan kode ini di initState
+```dart
+transformer = StreamTransformer<int, int>.fromHandlers(
+  handleData: (value, sink) {
+    sink.add(value * 10);
+  },
+  handleError: (error, trace, sink) {
+    sink.add(-1);
+  },
+  handleDone: (sink) => sink.close(),
+);
+```
+
+#### Langkah 3: Tetap di initState
+- Lakukan edit seperti kode berikut.
+
+```dart
+stream.transform(transformer).listen((event) {
+  setState(() {
+    lastNumber = event;
+  });
+}).onError((error) {
+  setState(() {
+    lastNumber = -1;
+  });
+});
+```
+
+#### Langkah 4: Run
+- Terakhir, run atau tekan F5 untuk melihat hasilnya jika memang belum running. Bisa juga lakukan hot restart jika aplikasi sudah running. Maka hasilnya akan seperti gambar berikut ini. Anda akan melihat tampilan angka dari 0 hingga 90.
+
+##### Soal 8
+- **Jelaskan maksud kode langkah 1-3 tersebut!**
+
+**Langkah 1 - Deklarasi transformer:**
+Mendeklarasikan variabel `transformer` bertipe `StreamTransformer` yang akan digunakan untuk mentransformasi data dalam stream sebelum sampai ke listener.
+
+**Langkah 2 - Inisialisasi transformer:**
+```dart
+transformer = StreamTransformer<int, int>.fromHandlers(
+  handleData: (value, sink) {
+    sink.add(value * 10);
+  },
+  handleError: (error, trace, sink) {
+    sink.add(-1);
+  },
+  handleDone: (sink) => sink.close(),
+);
+```
+
+Membuat `StreamTransformer` dengan 3 handler:
+- **handleData**: Mengalikan setiap nilai yang masuk dengan 10 sebelum dikirim ke sink. Jadi jika input 0-9, output menjadi 0-90.
+- **handleError**: Menangani error dan mengubahnya menjadi nilai -1.
+- **handleDone**: Menutup sink ketika stream selesai.
+
+**Langkah 3 - Menggunakan transformer:**
+```dart
+stream.transform(transformer).listen(...)
+```
+
+Method `transform()` diterapkan pada stream untuk memodifikasi data menggunakan transformer yang sudah dibuat. Setiap angka random (0-9) akan dikalikan 10 sehingga menghasilkan 0, 10, 20, 30, ..., 90.
+
+**Alur Kerja:**
+1. Button ditekan → generate random number (0-9)
+2. Angka masuk ke stream melalui sink
+3. Transformer mengalikan angka dengan 10
+4. Listener menerima hasil transformasi
+5. UI menampilkan angka yang sudah ditransformasi (0-90)
+
+- **Capture hasil praktikum Anda berupa GIF dan lampirkan di README.**
+
+![alt text](gif2.gif)
+
+---
