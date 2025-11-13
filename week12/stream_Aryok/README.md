@@ -104,3 +104,32 @@ final List<Color> colors = [
   Colors.lime,
 ];
 ```
+
+#### Langkah 5: Tambah method `getColors()`
+- Di dalam `class ColorStream` ketik method seperti kode berikut. Perhatikan tanda bintang di akhir keyword `async*` (ini digunakan untuk melakukan `Stream` data)
+
+```dart
+Stream<Color> getColors() async* {
+  
+}
+```
+
+#### Langkah 6: Tambah perintah `yield*`
+- Tambahkan kode berikut ini.
+
+```dart
+yield* Stream.periodic(
+  const Duration(seconds: 1), (int t) {
+    int index = t % colors.length;
+    return colors[index];
+});
+```
+
+##### Soal 3
+- **Jelaskan fungsi keyword `yield*` pada kode tersebut!**
+  
+  Keyword `yield*` digunakan untuk mengalirkan (stream) seluruh nilai dari Stream lain ke dalam Stream saat ini. Dalam kasus ini, `yield*` mengalirkan semua event dari `Stream.periodic` ke dalam Stream yang dikembalikan oleh method `getColors()`.
+
+- **Apa maksud isi perintah kode tersebut?**
+  
+  Kode tersebut membuat Stream yang mengirimkan warna secara periodik setiap 1 detik. `Stream.periodic` menghasilkan event setiap detik dengan nilai integer `t` yang increment. Nilai `t` kemudian digunakan untuk menentukan index warna dengan operasi modulo `t % colors.length`, sehingga warna akan berputar secara berulang dari list colors.
