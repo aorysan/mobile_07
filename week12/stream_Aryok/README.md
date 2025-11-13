@@ -532,3 +532,182 @@ Method `transform()` diterapkan pada stream untuk memodifikasi data menggunakan 
 ![alt text](gif2.gif)
 
 ---
+
+### Praktikum 4: Subscribe ke stream events
+
+Dari praktikum sebelumnya, kita telah menggunakan method `listen` untuk mendapatkan nilai dari stream. Ini akan menghasilkan sebuah `Subscription`. `Subscription` berisi method yang dapat digunakan untuk melakukan `listen` pada suatu event dari stream secara terstruktur.
+
+#### Langkah 1: Tambah variabel
+- Tambahkan variabel berikut di `class _StreamHomePageState`
+
+```dart
+late StreamSubscription subscription;
+```
+
+#### Langkah 2: Edit initState()
+- Edit kode seperti berikut ini.
+
+```dart
+subscription = stream.transform(transformer).listen(
+  (event) {
+    setState(() {
+      lastNumber = event;
+    });
+  },
+);
+```
+
+#### Langkah 3: Tetap di initState()
+- Tambahkan kode berikut ini.
+
+```dart
+subscription = stream.transform(transformer).listen(
+  (event) {
+    setState(() {
+      lastNumber = event;
+    });
+  },
+  onError: (error) {
+    setState(() {
+      lastNumber = -1;
+    });
+  },
+);
+```
+
+#### Langkah 4: Tambah properti onDone()
+- Tambahkan dibawahnya kode ini setelah `onError`
+
+```dart
+subscription = stream.transform(transformer).listen(
+  (event) {
+    setState(() {
+      lastNumber = event;
+    });
+  },
+  onError: (error) {
+    setState(() {
+      lastNumber = -1;
+    });
+  },
+  onDone: () {
+    print('OnDone was called');
+  },
+);
+```
+
+#### Langkah 5: Tambah method baru
+- Ketik method ini di dalam `class _StreamHomePageState`
+
+```dart
+void stopStream() {
+  numberStreamController.close();
+}
+```
+
+#### Langkah 6: Pindah ke method dispose()
+- Jika method `dispose()` belum ada, Anda dapat mengetiknya dan dibuat override. Ketik kode ini didalamnya.
+
+```dart
+@override
+void dispose() {
+  subscription.cancel();
+  numberStreamController.close();
+  super.dispose();
+}
+```
+
+#### Langkah 7: Pindah ke method build()
+- Tambahkan button kedua dengan isi kode seperti berikut ini.
+
+```dart
+ElevatedButton(
+  onPressed: () => stopStream(),
+  child: const Text('Stop Subscription'),
+),
+```
+
+#### Langkah 8: Edit method addRandomNumber()
+- Edit kode seperti berikut ini.
+
+```dart
+void addRandomNumber() {
+  Random random = Random();
+  int myNum = random.nextInt(10);
+  if (!numberStreamController.isClosed) {
+    numberStream.addNumberToSink(myNum);
+  } else {
+    setState(() {
+      lastNumber = -1;
+    });
+  }
+}
+```
+
+#### Langkah 9: Run
+- Anda akan melihat dua button seperti gambar berikut.
+
+#### Langkah 10: Tekan button 'Stop Subscription'
+- Anda akan melihat pesan di Debug Console seperti berikut: "OnDone was called"
+
+##### Soal 9
+- **Jelaskan maksud kode langkah 2, 6 dan 8 tersebut!**
+
+**Langkah 2 - Edit initState():**
+```dart
+subscription = stream.transform(transformer).listen((event) {
+  setState(() {
+    lastNumber = event;
+  });
+});
+```
+
+Kode ini menyimpan hasil dari `.listen()` ke dalam variabel `subscription` bertipe `StreamSubscription`. Dengan menyimpan subscription, kita bisa mengontrol stream seperti membatalkan subscription, pause, atau resume. Ini adalah best practice untuk mengelola stream subscription dengan baik.
+
+**Langkah 6 - dispose():**
+```dart
+@override
+void dispose() {
+  subscription.cancel();
+  numberStreamController.close();
+  super.dispose();
+}
+```
+
+Method `dispose()` dipanggil ketika widget dihapus dari widget tree. Di sini kita:
+1. `subscription.cancel()` - Membatalkan subscription untuk menghentikan listening ke stream dan mencegah memory leak
+2. `numberStreamController.close()` - Menutup stream controller untuk membebaskan resource
+3. `super.dispose()` - Memanggil dispose parent class
+
+Ini penting untuk cleanup dan mencegah memory leak.
+
+**Langkah 8 - Edit addRandomNumber():**
+```dart
+void addRandomNumber() {
+  Random random = Random();
+  int myNum = random.nextInt(10);
+  if (!numberStreamController.isClosed) {
+    numberStream.addNumberToSink(myNum);
+  } else {
+    setState(() {
+      lastNumber = -1;
+    });
+  }
+}
+```
+
+Kode ini menambahkan pengecekan apakah `numberStreamController` sudah ditutup atau belum dengan `!numberStreamController.isClosed`:
+- Jika stream **belum ditutup**: kirim angka random ke stream
+- Jika stream **sudah ditutup**: set `lastNumber` ke -1 sebagai indikator
+
+Ini mencegah error saat mencoba mengirim data ke stream yang sudah ditutup.
+
+**Alur Kerja Praktikum 4:**
+1. User menekan "New Random Number" → angka muncul (0-90)
+2. User menekan "Stop Subscription" → stream ditutup
+3. `onDone()` dipanggil → print "OnDone was called"
+4. User menekan "New Random Number" lagi → muncul -1 (karena stream sudah ditutup)
+
+![alt text](gif3.gif)
+
+---
