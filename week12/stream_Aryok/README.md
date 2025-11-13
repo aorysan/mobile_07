@@ -228,3 +228,152 @@ void changeColor() async {
 Dalam praktikum ini, `listen` lebih cocok digunakan karena Stream yang dibuat adalah infinite stream (berjalan terus-menerus setiap detik). Dengan `listen`, kode tidak akan blocking dan stream akan berjalan di background sambil tetap bisa melakukan operasi lainnya.
 
 ---
+
+### Praktikum 2: Stream controllers dan sinks
+
+`StreamControllers` akan membuat jembatan antara `Stream` dan `Sink`. `Stream` berisi data secara sekuensial yang dapat diterima oleh subscriber manapun, sedangkan `Sink` digunakan untuk mengisi (injeksi) data.
+
+#### Langkah 1: Buka file `stream.dart`
+- Lakukan impor dengan mengetik kode ini.
+
+```dart
+import 'dart:async';
+```
+
+#### Langkah 2: Tambah class NumberStream
+- Tetap di file `stream.dart` tambah class baru seperti berikut.
+
+```dart
+class NumberStream {
+  
+}
+```
+
+#### Langkah 3: Tambah StreamController
+- Di dalam `class NumberStream` buatlah variabel seperti berikut.
+
+```dart
+final StreamController<int> controller = StreamController<int>();
+```
+
+#### Langkah 4: Tambah method addNumberToSink
+- Tetap di `class NumberStream` buatlah method ini
+
+```dart
+void addNumberToSink(int newNumber) {
+  controller.sink.add(newNumber);
+}
+```
+
+#### Langkah 5: Tambah method close()
+```dart
+close() {
+  controller.close();
+}
+```
+
+#### Langkah 6: Buka main.dart
+- Ketik kode import seperti berikut
+
+```dart
+import 'dart:async';
+import 'dart:math';
+```
+
+#### Langkah 7: Tambah variabel
+- Di dalam `class _StreamHomePageState` ketik variabel berikut
+
+```dart
+int lastNumber = 0;
+late StreamController numberStreamController;
+late NumberStream numberStream;
+```
+
+#### Langkah 8: Edit initState()
+```dart
+@override
+void initState() {
+  super.initState();
+  numberStream = NumberStream();
+  numberStreamController = numberStream.controller;
+  Stream stream = numberStreamController.stream;
+  stream.listen((event) {
+    setState(() {
+      lastNumber = event;
+    });
+  });
+}
+```
+
+#### Langkah 9: Edit dispose()
+```dart
+@override
+void dispose() {
+  numberStreamController.close();
+  super.dispose();
+}
+```
+
+#### Langkah 10: Tambah method addRandomNumber()
+```dart
+void addRandomNumber() {
+  Random random = Random();
+  int myNum = random.nextInt(10);
+  numberStream.addNumberToSink(myNum);
+}
+```
+
+#### Langkah 11: Edit method build()
+```dart
+@override
+Widget build(BuildContext context) {
+  return Scaffold(
+    appBar: AppBar(title: const Text('Stream - Aryok')),
+    body: SizedBox(
+      width: double.infinity,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Text(lastNumber.toString()),
+          ElevatedButton(
+            onPressed: () => addRandomNumber(),
+            child: const Text('New Random Number'),
+          ),
+        ],
+      ),
+    ),
+  );
+}
+```
+
+#### Langkah 12: Run
+- Lakukan running pada aplikasi Flutter Anda, maka akan terlihat seperti gambar berikut.
+
+##### Soal 6
+- **Jelaskan maksud kode langkah 8 dan 10 tersebut!**
+
+**Langkah 8 - initState():**
+```dart
+numberStream = NumberStream();
+numberStreamController = numberStream.controller;
+Stream stream = numberStreamController.stream;
+stream.listen((event) {
+  setState(() {
+    lastNumber = event;
+  });
+});
+```
+Kode ini menginisialisasi `NumberStream` dan `StreamController`. Kemudian membuat listener pada stream yang akan mendengarkan setiap event (angka) yang dikirim melalui stream. Setiap kali ada data baru, `setState()` dipanggil untuk memperbarui UI dengan nilai `lastNumber` yang terbaru.
+
+**Langkah 10 - addRandomNumber():**
+```dart
+Random random = Random();
+int myNum = random.nextInt(10);
+numberStream.addNumberToSink(myNum);
+```
+Method ini membuat angka random dari 0-9 menggunakan `Random().nextInt(10)`, kemudian mengirimkan angka tersebut ke dalam stream melalui sink dengan `addNumberToSink()`. Angka ini kemudian akan diterima oleh listener di `initState()` dan ditampilkan di UI.
+
+- **Capture hasil praktikum Anda berupa GIF dan lampirkan di README.**
+
+![alt text](gif1.gif)
