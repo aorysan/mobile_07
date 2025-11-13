@@ -214,3 +214,17 @@ void changeColor() async {
 }
 ```
 
+##### Soal 5
+- **Jelaskan perbedaan menggunakan `listen` dan `await for` (langkah 9)!**
+
+| Aspek | `listen` | `await for` |
+|-------|----------|-------------|
+| **Sifat** | Non-blocking, asynchronous | Blocking, sequential |
+| **Eksekusi** | Kode setelahnya langsung dieksekusi | Menunggu stream selesai atau dibatalkan |
+| **Kontrol** | Bisa dibatalkan dengan subscription.cancel() | Sulit dibatalkan, harus break dari loop |
+| **Use Case** | Untuk stream yang berjalan terus (infinite) | Untuk stream dengan jumlah data terbatas |
+| **Fleksibilitas** | Lebih fleksibel, bisa handle error, done, dan pause | Lebih sederhana tapi kurang kontrol |
+
+Dalam praktikum ini, `listen` lebih cocok digunakan karena Stream yang dibuat adalah infinite stream (berjalan terus-menerus setiap detik). Dengan `listen`, kode tidak akan blocking dan stream akan berjalan di background sambil tetap bisa melakukan operasi lainnya.
+
+---
