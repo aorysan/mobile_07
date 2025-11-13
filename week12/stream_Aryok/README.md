@@ -58,8 +58,6 @@ class _StreamHomePageState extends State<StreamHomePage> {
 - **Gantilah warna tema aplikasi sesuai kesukaan Anda.**
 - Sudah ditambahkan nama panggilan "Aryok" pada title app dan mengganti tema menjadi `Colors.deepPurple`
 
-![Langkah 2](docs/soal1.png)
-
 #### Langkah 3: Buat file baru `stream.dart`
 - Buat file baru di folder lib project Anda. Lalu isi dengan kode berikut.
 
@@ -377,3 +375,70 @@ Method ini membuat angka random dari 0-9 menggunakan `Random().nextInt(10)`, kem
 - **Capture hasil praktikum Anda berupa GIF dan lampirkan di README.**
 
 ![alt text](gif1.gif)
+
+#### Langkah 13: Buka stream.dart
+- Tambahkan method berikut ini.
+
+```dart
+addError() {
+  controller.sink.addError('error');
+}
+```
+
+#### Langkah 14: Buka main.dart
+- Tambahkan method `onError` di dalam `class StreamHomePageState` pada method `listen` di fungsi `initState()` seperti berikut ini.
+
+```dart
+stream.listen((event) {
+  setState(() {
+    lastNumber = event;
+  });
+}).onError((error) {
+  setState(() {
+    lastNumber = -1;
+  });
+});
+```
+
+#### Langkah 15: Edit method addRandomNumber()
+- Lakukan comment pada dua baris kode berikut, lalu ketik kode seperti berikut ini.
+
+```dart
+void addRandomNumber() {
+  Random random = Random();
+  int myNum = random.nextInt(10);
+  // numberStream.addNumberToSink(myNum);
+  numberStream.addError();
+}
+```
+
+##### Soal 7
+- **Jelaskan maksud kode langkah 13 sampai 15 tersebut!**
+
+**Langkah 13 - addError():**
+Method ini menambahkan error ke dalam stream menggunakan `controller.sink.addError()`. Ini adalah cara untuk mensimulasikan atau mengirim error melalui stream.
+
+**Langkah 14 - onError handler:**
+Menambahkan error handler pada listener stream. Ketika stream menerima error (bukan data), maka blok `onError` akan dieksekusi dan mengubah `lastNumber` menjadi -1 sebagai indikator bahwa terjadi error.
+
+**Langkah 15 - Edit addRandomNumber():**
+Method diubah untuk mengirim error ke stream (dengan memanggil `addError()`) alih-alih mengirim angka random. Ini untuk mendemonstrasikan bagaimana error handling bekerja di stream. Ketika button ditekan, UI akan menampilkan -1 karena error.
+
+**Penjelasan Flow:**
+1. User menekan tombol
+2. `addRandomNumber()` dipanggil
+3. Method `addError()` mengirim error ke stream
+4. Listener menangkap error melalui `onError()`
+5. `setState()` mengubah `lastNumber` menjadi -1
+6. UI menampilkan -1
+
+- **Kembalikan kode seperti semula pada Langkah 15, comment `addError()` agar Anda dapat melanjutkan ke praktikum 3 berikutnya.**
+
+```dart
+void addRandomNumber() {
+  Random random = Random();
+  int myNum = random.nextInt(10);
+  numberStream.addNumberToSink(myNum);
+  // numberStream.addError();
+}
+```
