@@ -807,3 +807,180 @@ Jadi setiap kali button ditekan, `lastNumber` menampilkan hasil transformasi (0-
 ![alt text](gif4.gif)
 
 ---
+
+### Praktikum 6: StreamBuilder
+
+`StreamBuilder` adalah sebuah widget untuk melakukan listen terhadap event dari stream. Ketika sebuah event terkirim, maka akan dibangun ulang semua turunannya. `StreamBuilder` berguna untuk membangun UI secara reaktif yang diperbarui setiap data baru tersedia.
+
+#### Langkah 1: Buat Project Baru
+- Buatlah sebuah project flutter baru dengan nama **streambuilder_aryok** (beri nama panggilan Anda) di folder **week-12/src/** repository GitHub Anda.
+- **Catatan:** Pada praktikum ini, kita akan menggunakan project yang sama dari praktikum sebelumnya, jadi tidak perlu membuat project baru.
+
+#### Langkah 2: Buat file baru stream.dart
+- Tetap gunakan file `stream.dart` yang sudah ada.
+
+#### Langkah 3: Tetap di file stream.dart
+- Tambahkan method `getNumbers()` di dalam class `NumberStream`.
+
+```dart
+Stream<int> getNumbers() async* {
+  yield* Stream.periodic(const Duration(seconds: 1), (int t) {
+    Random random = Random();
+    int myNum = random.nextInt(10);
+    return myNum;
+  });
+}
+```
+
+#### Langkah 4: Edit main.dart
+- Buat class baru atau edit class yang sudah ada.
+
+```dart
+import 'package:flutter/material.dart';
+import 'stream.dart';
+
+void main() {
+  runApp(const MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Stream - Aryok',
+      theme: ThemeData(primarySwatch: Colors.deepPurple),
+      home: const StreamHomePage(),
+    );
+  }
+}
+
+class StreamHomePage extends StatefulWidget {
+  const StreamHomePage({super.key});
+
+  @override
+  State<StreamHomePage> createState() => _StreamHomePageState();
+}
+```
+
+#### Langkah 5: Tambah variabel
+- Di dalam `class _StreamHomePageState`, ketik variabel ini.
+
+```dart
+late Stream<int> numberStream;
+```
+
+#### Langkah 6: Edit initState()
+- Ketik kode seperti berikut.
+
+```dart
+@override
+void initState() {
+  super.initState();
+  numberStream = NumberStream().getNumbers();
+}
+```
+
+#### Langkah 7: Edit method build()
+```dart
+@override
+Widget build(BuildContext context) {
+  return Scaffold(
+    appBar: AppBar(title: const Text('Stream - Aryok')),
+    body: StreamBuilder(
+      stream: numberStream,
+      initialData: 0,
+      builder: (context, snapshot) {
+        if (snapshot.hasError) {
+          print('Error!');
+        }
+        if (snapshot.hasData) {
+          return Center(
+            child: Text(
+              snapshot.data.toString(),
+              style: const TextStyle(fontSize: 96),
+            ),
+          );
+        } else {
+          return const SizedBox.shrink();
+        }
+      },
+    ),
+  );
+}
+```
+
+#### Langkah 8: Run
+- Hasilnya, setiap detik akan tampil angka baru secara otomatis.
+
+##### Soal 12
+- **Jelaskan maksud kode pada langkah 3 dan 7!**
+
+**Langkah 3 - Method getNumbers():**
+```dart
+Stream<int> getNumbers() async* {
+  yield* Stream.periodic(const Duration(seconds: 1), (int t) {
+    Random random = Random();
+    int myNum = random.nextInt(10);
+    return myNum;
+  });
+}
+```
+
+Method ini membuat stream yang secara otomatis menghasilkan (emit) angka random setiap 1 detik:
+- `async*` menandakan ini adalah generator function yang menghasilkan stream
+- `Stream.periodic` membuat stream yang emit data secara periodik (setiap 1 detik)
+- Setiap detik, generate angka random 0-9 dengan `random.nextInt(10)`
+- `yield*` mengalirkan semua nilai dari `Stream.periodic` ke stream yang dikembalikan
+- Stream ini berjalan terus-menerus (infinite stream)
+
+**Langkah 7 - StreamBuilder Widget:**
+```dart
+StreamBuilder(
+  stream: numberStream,
+  initialData: 0,
+  builder: (context, snapshot) {
+    if (snapshot.hasError) {
+      print('Error!');
+    }
+    if (snapshot.hasData) {
+      return Center(
+        child: Text(
+          snapshot.data.toString(),
+          style: const TextStyle(fontSize: 96),
+        ),
+      );
+    } else {
+      return const SizedBox.shrink();
+    }
+  },
+)
+```
+
+`StreamBuilder` adalah widget yang listen ke stream dan rebuild UI setiap kali ada data baru:
+- **stream**: Sumber data stream (`numberStream`)
+- **initialData**: Nilai awal sebelum stream emit data pertama (0)
+- **builder**: Function yang dipanggil setiap ada event baru dari stream
+- **snapshot**: Berisi state terkini dari stream (data, error, connection state)
+  - `snapshot.hasError`: Cek apakah ada error
+  - `snapshot.hasData`: Cek apakah ada data
+  - `snapshot.data`: Data aktual dari stream
+
+**Keuntungan StreamBuilder:**
+1. **Otomatis manage subscription**: Tidak perlu manual listen dan cancel
+2. **Rebuild otomatis**: UI update sendiri saat ada data baru
+3. **Lifecycle aware**: Otomatis cleanup saat widget di-dispose
+4. **Lebih simple**: Tidak perlu `setState()` manual
+
+**Alur Kerja:**
+1. `initState()` → create stream dari `getNumbers()`
+2. Stream emit angka random setiap 1 detik
+3. `StreamBuilder` listen ke stream
+4. Setiap ada data baru → `builder` dipanggil
+5. UI rebuild dengan angka baru
+6. Proses berulang otomatis
+
+![alt text](gif5.gif)
+
+---

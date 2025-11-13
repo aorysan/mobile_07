@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
+import 'dart:math';
 
 class ColorStream {
   final List<Color> colors = [
@@ -36,5 +37,13 @@ class NumberStream {
 
   addError() {
     controller.sink.addError('error');
+  }
+
+  Stream<int> getNumbers() async* {
+    yield* Stream.periodic(const Duration(seconds: 1), (int t) {
+      Random random = Random();
+      int myNum = random.nextInt(10);
+      return myNum;
+    });
   }
 }
