@@ -195,7 +195,7 @@ Widget build(BuildContext context) {
 ##### Soal 4
 - **Capture hasil praktikum Anda berupa GIF dan lampirkan di README.**
 
-![alt text](gif.gif)
+![alt text](gif/gif.gif)
 
 Aplikasi berhasil menampilkan perubahan warna background secara otomatis setiap 1 detik menggunakan Stream dengan metode `await for`.
 
@@ -374,7 +374,7 @@ Method ini membuat angka random dari 0-9 menggunakan `Random().nextInt(10)`, kem
 
 - **Capture hasil praktikum Anda berupa GIF dan lampirkan di README.**
 
-![alt text](gif1.gif)
+![alt text](gif/gif1.gif)
 
 #### Langkah 13: Buka stream.dart
 - Tambahkan method berikut ini.
@@ -442,10 +442,6 @@ void addRandomNumber() {
   // numberStream.addError();
 }
 ```
-
-![Hasil Error Handling](docs/soal7.gif)
-
----
 
 ### Praktikum 3: Injeksi data ke streams
 
@@ -529,7 +525,7 @@ Method `transform()` diterapkan pada stream untuk memodifikasi data menggunakan 
 
 - **Capture hasil praktikum Anda berupa GIF dan lampirkan di README.**
 
-![alt text](gif2.gif)
+![alt text](gif/gif2.gif)
 
 ---
 
@@ -708,7 +704,7 @@ Ini mencegah error saat mencoba mengirim data ke stream yang sudah ditutup.
 3. `onDone()` dipanggil → print "OnDone was called"
 4. User menekan "New Random Number" lagi → muncul -1 (karena stream sudah ditutup)
 
-![alt text](gif3.gif)
+![alt text](gif/gif3.gif)
 
 ---
 
@@ -804,7 +800,7 @@ Jadi setiap kali button ditekan, `lastNumber` menampilkan hasil transformasi (0-
 
 - **Capture hasil praktikum Anda berupa GIF dan lampirkan di README.**
 
-![alt text](gif4.gif)
+![alt text](gif/gif4.gif)
 
 ---
 
@@ -981,7 +977,7 @@ StreamBuilder(
 5. UI rebuild dengan angka baru
 6. Proses berulang otomatis
 
-![alt text](gif5.gif)
+![alt text](gif/gif5.gif)
 
 ---
 
@@ -1200,6 +1196,6 @@ User Tap Button
 | User Interaction | Tidak ada | Ada (button trigger event) |
 | Pattern | Simple reactive UI | Full BLoC architecture |
 
-![alt text](gif6.gif)
+![alt text](gif/gif6.gif)
 
 ---
