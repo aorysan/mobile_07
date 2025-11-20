@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:path_provider/path_provider.dart';
@@ -13,6 +14,8 @@ class _PrefsScreenState extends State<PrefsScreen> {
   int appCounter = 0;
   String documentsPath = '';
   String tempPath = '';
+  late File myFile;
+  String fileText = '';
 
   @override
   void initState() {
@@ -28,6 +31,29 @@ class _PrefsScreenState extends State<PrefsScreen> {
       documentsPath = docDir.path;
       tempPath = tempDir.path;
     });
+    myFile = File('$documentsPath/pizzas.txt');
+    writeFile();
+  }
+
+  Future<bool> writeFile() async {
+    try {
+      await myFile.writeAsString('Aryo Adi Putro, 2341720084');
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  Future<bool> readFile() async {
+    try {
+      String fileContent = await myFile.readAsString();
+      setState(() {
+        fileText = fileContent;
+      });
+      return true;
+    } catch (e) {
+      return false;
+    }
   }
 
   Future<void> readAndWritePreference() async {
@@ -148,6 +174,40 @@ class _PrefsScreenState extends State<PrefsScreen> {
                     ),
                   ],
                 ),
+              ),
+            ),
+            const SizedBox(height: 40),
+            const Divider(),
+            const SizedBox(height: 20),
+            // File Operations Section
+            const Text(
+              'File Operations:',
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 16),
+            Center(
+              child: Column(
+                children: [
+                  ElevatedButton(
+                    onPressed: () {
+                      readFile();
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.blue,
+                      foregroundColor: Colors.white,
+                    ),
+                    child: const Text('Read File'),
+                  ),
+                  const SizedBox(height: 16),
+                  Text(
+                    fileText,
+                    style: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.green,
+                    ),
+                  ),
+                ],
               ),
             ),
           ],

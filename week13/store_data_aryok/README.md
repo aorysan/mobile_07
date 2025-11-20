@@ -547,10 +547,10 @@ Aplikasi berhasil menangani data JSON yang tidak konsisten dengan:
 3. **User-Friendly Output**: Menggunakan ternary operator untuk tampilan yang baik di UI
 
 **Keuntungan Implementasi Error Handling:**
-- ✅ Aplikasi tidak crash meski data tidak konsisten
-- ✅ Konversi tipe data otomatis (String ↔ int/double)
-- ✅ Nilai default mencegah null errors
-- ✅ UI tetap rapi meski data hilang/rusak
+- Aplikasi tidak crash meski data tidak konsisten
+- Konversi tipe data otomatis (String ↔ int/double)
+- Nilai default mencegah null errors
+- UI tetap rapi meski data hilang/rusak
 
 ---
 
@@ -639,10 +639,10 @@ Jalankan aplikasi. Tidak akan ada perubahan visual, tetapi kode Anda kini lebih 
 **Maksud "More Safe and Maintainable":**
 
 **1. Safe (Aman):**
-- ✅ **Compile-time Error Detection**: Jika salah ketik nama konstanta, IDE langsung mendeteksi error saat coding
-- ✅ **Autocomplete Support**: IDE memberikan suggestion saat mengetik, mengurangi typo
-- ✅ **Type Safety**: Konstanta memiliki tipe yang jelas (String), mencegah error tipe data
-- ✅ **Refactoring Friendly**: Jika perlu rename, bisa menggunakan refactor tools tanpa takut ada yang terlewat
+- **Compile-time Error Detection**: Jika salah ketik nama konstanta, IDE langsung mendeteksi error saat coding
+- **Autocomplete Support**: IDE memberikan suggestion saat mengetik, mengurangi typo
+- **Type Safety**: Konstanta memiliki tipe yang jelas (String), mencegah error tipe data
+- **Refactoring Friendly**: Jika perlu rename, bisa menggunakan refactor tools tanpa takut ada yang terlewat
 
 **Contoh Masalah dengan String Literal:**
 ```dart
@@ -653,16 +653,16 @@ json['descriptoin'] // Salah ketik, seharusnya 'description'
 
 **Dengan Konstanta:**
 ```dart
-// ✅ IDE langsung warning jika salah ketik
+// IDE langsung warning jika salah ketik
 json[keyPizzaname]  // Error: undefined name 'keyPizzaname'
 json[keyPizzaName]  // ✓ Correct
 ```
 
 **2. Maintainable (Mudah Dipelihara):**
-- ✅ **Single Source of Truth**: Kunci JSON didefinisikan di satu tempat
-- ✅ **Easy to Update**: Jika API berubah, cukup update konstanta di satu tempat
-- ✅ **Consistency**: Semua referensi menggunakan konstanta yang sama
-- ✅ **Documentation**: Konstanta di top-level berfungsi sebagai dokumentasi field yang tersedia
+- **Single Source of Truth**: Kunci JSON didefinisikan di satu tempat
+- **Easy to Update**: Jika API berubah, cukup update konstanta di satu tempat
+- **Consistency**: Semua referensi menggunakan konstanta yang sama
+- **Documentation**: Konstanta di top-level berfungsi sebagai dokumentasi field yang tersedia
 
 **Contoh Skenario Maintenance:**
 
@@ -685,7 +685,7 @@ void someMethod() {
 }
 ```
 
-**Dengan Konstanta (✅ Safe):**
+**Dengan Konstanta  Safe):**
 ```dart
 // Cukup update di satu tempat
 const String keyPizzaName = 'name';  // Update hanya di sini
@@ -954,57 +954,6 @@ Jalankan aplikasi. Tombol reset sekarang akan berfungsi, menghapus semua pasanga
 
 ![alt text](gif.gif)
 
-**Cara Mengakses SharedPreferences Demo:**
-Klik icon storage (💾) di AppBar pada halaman utama untuk membuka SharedPreferences demo.
-
-**Fitur yang Diimplementasikan:**
-1. ✅ **Counter Persisten**: Menghitung berapa kali app dibuka
-2. ✅ **Auto Save**: Otomatis save setiap kali app dibuka
-3. ✅ **Reset Function**: Tombol untuk reset counter ke 0
-4. ✅ **Persistent Storage**: Data tetap ada meski app ditutup
-
-**Cara Kerja SharedPreferences:**
-
-1. **Read Data:**
-```dart
-final prefs = await SharedPreferences.getInstance();
-int value = prefs.getInt('key') ?? defaultValue;
-```
-
-2. **Write Data:**
-```dart
-await prefs.setInt('key', value);
-```
-
-3. **Delete Data:**
-```dart
-await prefs.clear();  // Hapus semua
-// atau
-await prefs.remove('key');  // Hapus key tertentu
-```
-
-**Tipe Data yang Didukung SharedPreferences:**
-- ✅ `int` - `setInt()` / `getInt()`
-- ✅ `double` - `setDouble()` / `getDouble()`
-- ✅ `String` - `setString()` / `getString()`
-- ✅ `bool` - `setBool()` / `getBool()`
-- ✅ `List<String>` - `setStringList()` / `getStringList()`
-
-**Use Cases SharedPreferences:**
-- 📝 Menyimpan user preferences (theme, language)
-- 🔐 Menyimpan login state (token, username)
-- 📊 Menyimpan data sederhana (counter, settings)
-- ⚙️ Menyimpan konfigurasi app
-- ❌ **TIDAK** untuk data kompleks/besar (gunakan database)
-
-**Keuntungan:**
-- ⚡ Cepat dan mudah digunakan
-- 💾 Persistent storage (data tidak hilang)
-- 🔄 Synchronous & Asynchronous support
-- 📱 Cross-platform (Android, iOS, Web, Desktop)
-
----
-
 ### Praktikum 5: Menggunakan path_provider
 
 Praktikum ini mengajarkan cara mengakses direktori file di sistem menggunakan plugin `path_provider`.
@@ -1016,13 +965,6 @@ Jalankan perintah berikut untuk menambahkan plugin `path_provider`:
 ```bash
 flutter pub add path_provider
 ```
-
-**Penjelasan:**
-`path_provider` adalah plugin yang memudahkan akses ke direktori sistem file di berbagai platform (Android, iOS, Windows, macOS, Linux). Plugin ini menyediakan path ke direktori umum seperti:
-- Documents directory
-- Temporary directory
-- Application support directory
-- Downloads directory
 
 #### Langkah 2: Import path_provider
 
@@ -1203,3 +1145,402 @@ Jalankan aplikasi. Anda akan melihat path untuk documents directory dan temporar
 
 ![alt text](image-6.png)
 
+
+---
+
+### Praktikum 6: Akses filesystem dengan direktori
+
+Praktikum ini melanjutkan Praktikum 5, berfokus pada operasi file system untuk menulis dan membaca file menggunakan library `dart:io`.
+
+#### Langkah 1: Lakukan Import dart:io
+
+Di file `prefs_screen.dart`, tambahkan import untuk pustaka `dart:io`:
+
+```dart
+import 'dart:io';
+```
+
+**Penjelasan:**
+`dart:io` adalah library Dart untuk operasi Input/Output, termasuk:
+- File operations (read, write, delete)
+- Directory operations
+- Network operations
+- Process management
+
+#### Langkah 2: Tambahkan Variabel File dan Text
+
+Di State class, tambahkan variabel `myFile` (dengan modifier `late`) dan `fileText` untuk menyimpan konten yang akan dibaca:
+
+```dart
+late File myFile;
+String fileText = '';
+```
+
+**Penjelasan:**
+- `late File myFile`: Variabel yang akan diinisialisasi setelah getPaths() selesai. Modifier `late` menunda inisialisasi.
+- `String fileText`: Menyimpan konten file yang dibaca untuk ditampilkan di UI
+
+#### Langkah 3: Buat Method writeFile()
+
+Buat method asinkron `writeFile()` yang menggunakan `myFile.writeAsString()` untuk menulis konten ke file:
+
+```dart
+Future<bool> writeFile() async {
+  try {
+    await myFile.writeAsString('Aryo Adi Putro, 2341720084');
+    return true;
+  } catch (e) {
+    return false;
+  }
+}
+```
+
+**Penjelasan:**
+- `myFile.writeAsString()`: Menulis string ke file, membuat file baru jika belum ada, overwrite jika sudah ada
+- Try-catch untuk error handling (misal: permission denied, disk full)
+- Return `true` jika sukses, `false` jika gagal
+
+#### Langkah 4: Inisialisasi File dan Panggil writeFile() di initState()
+
+Perbarui `getPaths()`: setelah mendapatkan path, inisialisasi `myFile` dengan jalur lengkap di direktori dokumen, dan panggil `writeFile()`:
+
+```dart
+Future<void> getPaths() async {
+  final docDir = await getApplicationDocumentsDirectory();
+  final tempDir = await getTemporaryDirectory();
+  setState(() {
+    documentsPath = docDir.path;
+    tempPath = tempDir.path;
+  });
+  myFile = File('$documentsPath/pizzas.txt');
+  writeFile();
+}
+```
+
+**Penjelasan:**
+- `File('$documentsPath/pizzas.txt')`: Membuat object File dengan path lengkap
+- File akan berada di Documents directory dengan nama `pizzas.txt`
+- `writeFile()` dipanggil otomatis setiap kali app dibuka
+
+#### Langkah 5: Buat Method readFile()
+
+Buat method asinkron `readFile()` yang menggunakan `myFile.readAsString()` untuk membaca konten file dan memperbarui `fileText` melalui `setState()`:
+
+```dart
+Future<bool> readFile() async {
+  try {
+    String fileContent = await myFile.readAsString();
+    setState(() {
+      fileText = fileContent;
+    });
+    return true;
+  } catch (e) {
+    return false;
+  }
+}
+```
+
+**Penjelasan:**
+- `myFile.readAsString()`: Membaca seluruh isi file sebagai String
+- `setState()`: Update UI dengan konten file
+- Error handling untuk kasus file tidak ada/tidak bisa dibaca
+
+#### Langkah 6: Edit build() dan Tambahkan Tombol Baca
+
+Di method `build()`, tambahkan section File Operations dengan `ElevatedButton` yang memanggil `readFile()` dan `Text` yang menampilkan `fileText`:
+
+```dart
+// File Operations Section
+const Text(
+  'File Operations:',
+  style: TextStyle(
+    fontSize: 20,
+    fontWeight: FontWeight.bold,
+  ),
+),
+const SizedBox(height: 16),
+Center(
+  child: Column(
+    children: [
+      ElevatedButton(
+        onPressed: () {
+          readFile();
+        },
+        style: ElevatedButton.styleFrom(
+          backgroundColor: Colors.blue,
+          foregroundColor: Colors.white,
+        ),
+        child: const Text('Read File'),
+      ),
+      const SizedBox(height: 16),
+      Text(
+        fileText,
+        style: const TextStyle(
+          fontSize: 18,
+          fontWeight: FontWeight.bold,
+          color: Colors.green,
+        ),
+      ),
+    ],
+  ),
+),
+```
+
+#### Langkah 7: Run
+
+Jalankan aplikasi. Setelah menekan tombol 'Read File', konten yang ditulis (Aryo Adi Putro, 2341720084) akan ditampilkan.
+
+##### Soal 8
+
+- Jelaskan maksud kode pada langkah 3 dan 7!
+- Capture hasil praktikum Anda berupa GIF dan lampirkan di README.
+- Lalu lakukan commit dengan pesan "W13: Jawaban Soal 8".
+
+**Jawaban:**
+
+![alt text](gif1.gif)
+
+**Penjelasan Langkah 3 (writeFile):**
+
+Method `writeFile()` berfungsi untuk menulis data ke file system:
+
+```dart
+Future<bool> writeFile() async {
+  try {
+    await myFile.writeAsString('Aryo Adi Putro, 2341720084');
+    return true;
+  } catch (e) {
+    return false;
+  }
+}
+```
+
+**Detail Penjelasan:**
+1. **`Future<bool>`**: Method asynchronous yang return boolean (sukses/gagal)
+2. **`await myFile.writeAsString()`**: 
+   - Menulis string ke file secara asynchronous
+   - Jika file belum ada, akan membuat file baru
+   - Jika file sudah ada, akan menimpa (overwrite) konten lama
+   - Data yang ditulis: nama lengkap dan NIM
+3. **Try-Catch Block**: 
+   - Menangani error seperti permission denied, disk full, path invalid
+   - Return `true` jika penulisan sukses
+   - Return `false` jika terjadi error
+4. **Kapan Dipanggil**: 
+   - Otomatis dipanggil di `getPaths()` setiap app dibuka
+   - File `pizzas.txt` di-recreate setiap kali
+
+**Penjelasan Langkah 7 (Run & UI):**
+
+Saat aplikasi dijalankan:
+
+1. **Initialization Flow:**
+   ```
+   initState() 
+   → readAndWritePreference() (counter)
+   → getPaths() 
+   → myFile = File('path/pizzas.txt')
+   → writeFile() (tulis "Aryo Adi Putro, 2341720084")
+   ```
+
+2. **User Interaction:**
+   - User menekan tombol "Read File"
+   - `readFile()` dipanggil
+   - `myFile.readAsString()` membaca isi file
+   - `setState(() { fileText = fileContent })` update UI
+   - Text widget menampilkan konten dengan styling hijau bold
+
+3. **Result:**
+   - Tampil text: "Aryo Adi Putro, 2341720084"
+   - Membuktikan write & read file berhasil
+   - Data persistent di file system
+
+**Perbandingan Storage Methods:**
+
+| Aspek | SharedPreferences | File System (dart:io) |
+|-------|-------------------|----------------------|
+| **Tipe Data** | Key-value primitives | Any data (String, bytes, JSON) |
+| **Ukuran** | < 1MB | Unlimited (depends on storage) |
+| **Kompleksitas** | Sederhana | Lebih kompleks |
+| **Use Case** | Settings, flags, counters | Documents, large data, media |
+| **API** | `prefs.setInt()` | `file.writeAsString()` |
+| **Speed** | Sangat cepat | Cepat untuk small files |
+
+**File Operations yang Tersedia:**
+
+```dart
+// Write
+await myFile.writeAsString('text');          // Overwrite
+await myFile.writeAsString('text', mode: FileMode.append); // Append
+
+// Read
+String content = await myFile.readAsString();
+List<String> lines = await myFile.readAsLines();
+
+// Check
+bool exists = await myFile.exists();
+int size = await myFile.length();
+
+// Delete
+await myFile.delete();
+
+// Copy/Rename
+await myFile.copy('newPath');
+await myFile.rename('newName');
+```
+
+---
+
+### Praktikum 7: Menyimpan data dengan enkripsi/dekripsi
+
+Praktikum ini mengajarkan cara menyimpan data sensitif (seperti kata sandi) dengan aman menggunakan package `flutter_secure_storage`.
+
+#### Langkah 1: Tambahkan Dependensi
+
+Jalankan perintah berikut untuk menambahkan package `flutter_secure_storage`:
+
+```bash
+flutter pub add flutter_secure_storage
+```
+
+#### Langkah 2: Lakukan Import
+
+Di file `main.dart`, impor package yang diperlukan:
+
+```dart
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+```
+
+#### Langkah 3: Tambahkan Variabel dan Controller
+
+Di State class (`_MyHomePageState`), tambahkan `TextEditingController` dan variabel untuk menyimpan kata sandi yang dibaca:
+
+```dart
+final pwdController = TextEditingController();
+String myPass = '';
+```
+
+**Penjelasan:**
+- `pwdController`: Controller untuk TextField input password
+- `myPass`: Variabel untuk menyimpan password yang dibaca dari secure storage
+
+#### Langkah 4: Inisialisasi Secure Storage
+
+Di State class, inisialisasi `FlutterSecureStorage` dan tentukan kuncinya:
+
+```dart
+final storage = const FlutterSecureStorage();
+final myKey = 'myPass';
+```
+
+**Penjelasan:**
+- `storage`: Instance dari FlutterSecureStorage
+- `myKey`: Key untuk menyimpan/mengambil data (seperti key di SharedPreferences)
+- Instance bisa dibuat sebagai `const` karena tidak memiliki state
+
+#### Langkah 5: Buat Method writeToSecureStorage()
+
+Buat method asinkron untuk menulis data dari `pwdController` ke secure storage:
+
+```dart
+Future<void> writeToSecureStorage() async {
+  await storage.write(key: myKey, value: pwdController.text);
+}
+```
+
+**Penjelasan:**
+- `storage.write()`: Menulis data ke secure storage dengan enkripsi otomatis
+- `key`: Identifier untuk data (seperti variable name)
+- `value`: Data yang akan disimpan (String)
+- Data dienkripsi secara otomatis sesuai platform
+
+#### Langkah 6: Buat Method readFromSecureStorage()
+
+Buat method asinkron untuk membaca data dari secure storage:
+
+```dart
+Future<void> readFromSecureStorage() async {
+  String? secret = await storage.read(key: myKey);
+  setState(() {
+    myPass = secret ?? '';
+  });
+}
+```
+
+**Penjelasan:**
+- `storage.read()`: Membaca dan mendekripsi data otomatis
+- Return type `String?`: Bisa null jika key tidak ditemukan
+- `setState()`: Update UI dengan data yang dibaca
+- Null coalescing (`??`) untuk handle kasus key tidak ada
+
+#### Langkah 7: Edit build() untuk UI dan Logic
+
+Perbarui method `build()` untuk menyertakan `TextField` dan dua `ElevatedButton` (Save Value dan Read Value):
+
+```dart
+TextField(
+  controller: pwdController,
+  decoration: const InputDecoration(
+    labelText: 'Enter Password',
+    border: OutlineInputBorder(),
+    prefixIcon: Icon(Icons.lock),
+  ),
+  obscureText: true,
+),
+const SizedBox(height: 12),
+ElevatedButton(
+  onPressed: () {
+    writeToSecureStorage();
+  },
+  child: const Text('Save Value'),
+),
+```
+
+**Penjelasan:**
+- `obscureText: true`: Password tersembunyi (tampil sebagai bullet points)
+- `prefixIcon: Icon(Icons.lock)`: Icon gembok untuk visual indicator
+- `onPressed`: Trigger write operation
+
+#### Langkah 8: Hubungkan Read ke Tombol
+
+Hubungkan method read ke tombol Read Value:
+
+```dart
+ElevatedButton(
+  onPressed: () {
+    readFromSecureStorage();
+  },
+  child: const Text('Read Value'),
+),
+```
+
+Tambahkan Text widget untuk menampilkan hasil:
+
+```dart
+if (myPass.isNotEmpty)
+  Container(
+    padding: const EdgeInsets.all(12),
+    decoration: BoxDecoration(
+      color: Colors.grey[200],
+      borderRadius: BorderRadius.circular(8),
+    ),
+    child: Text(
+      'Stored Value: $myPass',
+      style: const TextStyle(
+        fontSize: 16,
+        fontWeight: FontWeight.bold,
+      ),
+    ),
+  ),
+```
+
+#### Langkah 9: Run
+
+Jalankan aplikasi. Masukkan teks, simpan, lalu baca kembali. Teks tersebut seharusnya ditampilkan, menandakan data telah disimpan dan diambil dengan aman.
+
+##### Soal 9
+
+- Capture hasil praktikum Anda berupa GIF dan lampirkan di README.
+- Lalu lakukan commit dengan pesan "W13: Jawaban Soal 9".
+
+![alt text](gif2.gif)
