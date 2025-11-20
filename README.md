@@ -15,3 +15,4 @@
 | 9    | Kamera | [klik here](https://github.com/aorysan/mobile_07/blob/main/week09/kamera/README.md) |
 | 10   | Dasar State Management | [klik here](https://github.com/aorysan/mobile_07/blob/main/week10/flutterstate/README.md) |
 | 11   | Pemrograman Asynchronous | [klik here](https://github.com/aorysan/mobile_07/blob/main/week11/books/README.md) |
+| 12   | Stream | [klik here](https://github.com/aorysan/mobile_07/blob/main/week12/stream_Aryok/README.md) |
