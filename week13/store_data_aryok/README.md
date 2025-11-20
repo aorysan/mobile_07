@@ -1004,3 +1004,202 @@ await prefs.remove('key');  // Hapus key tertentu
 - 📱 Cross-platform (Android, iOS, Web, Desktop)
 
 ---
+
+### Praktikum 5: Menggunakan path_provider
+
+Praktikum ini mengajarkan cara mengakses direktori file di sistem menggunakan plugin `path_provider`.
+
+#### Langkah 1: Tambah Dependensi path_provider
+
+Jalankan perintah berikut untuk menambahkan plugin `path_provider`:
+
+```bash
+flutter pub add path_provider
+```
+
+**Penjelasan:**
+`path_provider` adalah plugin yang memudahkan akses ke direktori sistem file di berbagai platform (Android, iOS, Windows, macOS, Linux). Plugin ini menyediakan path ke direktori umum seperti:
+- Documents directory
+- Temporary directory
+- Application support directory
+- Downloads directory
+
+#### Langkah 2: Import path_provider
+
+Buka file `prefs_screen.dart`, tambahkan import:
+
+```dart
+import 'package:path_provider/path_provider.dart';
+```
+
+#### Langkah 3: Tambah Variabel
+
+Tambahkan dua variabel String untuk menyimpan path direktori:
+
+```dart
+String documentsPath = '';
+String tempPath = '';
+```
+
+**Penjelasan:**
+- `documentsPath`: Menyimpan path ke direktori dokumen aplikasi
+- `tempPath`: Menyimpan path ke direktori temporary aplikasi
+
+#### Langkah 4: Buat Method getPaths()
+
+Buat method asynchronous untuk mendapatkan path direktori:
+
+```dart
+Future<void> getPaths() async {
+  final docDir = await getApplicationDocumentsDirectory();
+  final tempDir = await getTemporaryDirectory();
+  setState(() {
+    documentsPath = docDir.path;
+    tempPath = tempDir.path;
+  });
+}
+```
+
+**Penjelasan:**
+- `getApplicationDocumentsDirectory()`: Mengambil direktori untuk menyimpan file yang diperlukan aplikasi dan harus di-backup
+- `getTemporaryDirectory()`: Mengambil direktori untuk file temporary yang bisa dihapus sewaktu-waktu
+- `setState()`: Memperbarui UI dengan path yang diperoleh
+
+#### Langkah 5: Panggil getPaths()
+
+Panggil method `getPaths()` di dalam `initState()`:
+
+```dart
+@override
+void initState() {
+  super.initState();
+  readAndWritePreference();
+  getPaths();
+}
+```
+
+#### Langkah 6: Perbarui Tampilan (body)
+
+Update body Scaffold untuk menampilkan path direktori:
+
+```dart
+@override
+Widget build(BuildContext context) {
+  return Scaffold(
+    appBar: AppBar(
+      title: const Text('Shared Preferences - Aryok'),
+      backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+    ),
+    body: Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Counter Section
+          Center(
+            child: Column(
+              children: [
+                const Text(
+                  'You have opened the app',
+                  style: TextStyle(fontSize: 18),
+                ),
+                Text(
+                  '$appCounter times',
+                  style: const TextStyle(
+                    fontSize: 48,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 20),
+                ElevatedButton(
+                  onPressed: () {
+                    deletePreference();
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.red,
+                    foregroundColor: Colors.white,
+                  ),
+                  child: const Text('Reset counter'),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 40),
+          const Divider(),
+          const SizedBox(height: 20),
+          // Path Provider Section
+          const Text(
+            'File System Paths:',
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          const SizedBox(height: 16),
+          Card(
+            child: Padding(
+              padding: const EdgeInsets.all(12.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    'Documents Directory:',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    documentsPath.isEmpty
+                        ? 'Loading...'
+                        : documentsPath,
+                    style: const TextStyle(fontSize: 12),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          const SizedBox(height: 12),
+          Card(
+            child: Padding(
+              padding: const EdgeInsets.all(12.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    'Temporary Directory:',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    tempPath.isEmpty ? 'Loading...' : tempPath,
+                    style: const TextStyle(fontSize: 12),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    ),
+  );
+}
+```
+
+#### Langkah 7: Run
+
+Jalankan aplikasi. Anda akan melihat path untuk documents directory dan temporary directory.
+
+##### Soal 7
+
+- Capture hasil praktikum Anda dan lampirkan di README.
+- Lalu lakukan commit dengan pesan "W13: Jawaban Soal 7".
+
+**Jawaban:**
+
+![alt text](image-6.png)
+
