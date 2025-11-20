@@ -538,3 +538,173 @@ Jalankan aplikasi. Sekarang data yang tidak konsisten telah ditangani dengan bai
 - Laku lakukan commit dengan pesan "W13: Jawaban Soal 4".
 
 ![alt text](image-2.png)
+
+**Jawaban:**
+
+Aplikasi berhasil menangani data JSON yang tidak konsisten dengan:
+1. **Type Safety**: Menggunakan `tryParse` untuk konversi yang aman
+2. **Null Safety**: Menggunakan null coalescing operator (`??`) untuk nilai default
+3. **User-Friendly Output**: Menggunakan ternary operator untuk tampilan yang baik di UI
+
+**Keuntungan Implementasi Error Handling:**
+- ✅ Aplikasi tidak crash meski data tidak konsisten
+- ✅ Konversi tipe data otomatis (String ↔ int/double)
+- ✅ Nilai default mencegah null errors
+- ✅ UI tetap rapi meski data hilang/rusak
+
+---
+
+### Praktikum 3: Menangani error JSON
+
+Pada praktikum ini, kita akan belajar menangani common JSON errors dengan mengganti string literals (nama kunci JSON) dengan konstanta untuk menghindari error yang sulit di-debug (kesalahan pengetikan).
+
+#### Langkah 1: Buka `pizza.dart` dan Buat Konstanta
+
+Di bagian atas file pizza.dart, di luar class Pizza, deklarasikan konstanta untuk setiap kunci JSON.
+
+```dart
+// Konstanta untuk kunci JSON
+const String keyId = 'id';
+const String keyPizzaName = 'pizzaName';
+const String keyDescription = 'description';
+const String keyPrice = 'price';
+const String keyImageUrl = 'imageUrl';
+```
+
+**Penjelasan:**
+- Membuat konstanta di level top-level (di luar class)
+- Menggunakan prefix `key` untuk membedakan dengan nama variabel lain
+- Konstanta bersifat compile-time constant, lebih efisien
+
+#### Langkah 2: Perbarui fromJson() menggunakan Konstanta
+
+Di constructor Pizza.fromJson, ganti semua string literal kunci JSON (misalnya 'id') dengan konstanta yang sesuai (keyId).
+
+```dart
+factory Pizza.fromJson(Map<String, dynamic> json) {
+  return Pizza(
+    id: int.tryParse(json[keyId].toString()) ?? 0,
+    pizzaName: json[keyPizzaName]?.toString() ?? '',
+    description: json[keyDescription]?.toString() ?? '',
+    price: double.tryParse(json[keyPrice].toString()) ?? 0.0,
+    imageUrl: json[keyImageUrl]?.toString() ?? '',
+  );
+}
+```
+
+**Perubahan:**
+- `json['id']` → `json[keyId]`
+- `json['pizzaName']` → `json[keyPizzaName]`
+- `json['description']` → `json[keyDescription]`
+- `json['price']` → `json[keyPrice]`
+- `json['imageUrl']` → `json[keyImageUrl]`
+
+#### Langkah 3: Perbarui toJson() menggunakan Konstanta
+
+Perbarui juga method toJson() agar menggunakan konstanta yang sama.
+
+```dart
+Map<String, dynamic> toJson() {
+  return {
+    keyId: id,
+    keyPizzaName: pizzaName,
+    keyDescription: description,
+    keyPrice: price,
+    keyImageUrl: imageUrl,
+  };
+}
+```
+
+**Perubahan:**
+- `'id'` → `keyId`
+- `'pizzaName'` → `keyPizzaName`
+- `'description'` → `keyDescription`
+- `'price'` → `keyPrice`
+- `'imageUrl'` → `keyImageUrl`
+
+#### Langkah 4: Run
+
+Jalankan aplikasi. Tidak akan ada perubahan visual, tetapi kode Anda kini lebih safe dan maintainable.
+
+##### Soal 5
+
+- Jelaskan maksud kode lebih safe dan maintainable!
+- Capture hasil praktikum Anda dan lampirkan di README.
+- Lalu lakukan commit dengan pesan "W13: Jawaban Soal 5".
+
+**Jawaban:**
+
+![alt text](image-3.png)
+
+**Maksud "More Safe and Maintainable":**
+
+**1. Safe (Aman):**
+- ✅ **Compile-time Error Detection**: Jika salah ketik nama konstanta, IDE langsung mendeteksi error saat coding
+- ✅ **Autocomplete Support**: IDE memberikan suggestion saat mengetik, mengurangi typo
+- ✅ **Type Safety**: Konstanta memiliki tipe yang jelas (String), mencegah error tipe data
+- ✅ **Refactoring Friendly**: Jika perlu rename, bisa menggunakan refactor tools tanpa takut ada yang terlewat
+
+**Contoh Masalah dengan String Literal:**
+```dart
+// ❌ Typo tidak terdeteksi sampai runtime
+json['pizzaname']  // Salah ketik, seharusnya 'pizzaName'
+json['descriptoin'] // Salah ketik, seharusnya 'description'
+```
+
+**Dengan Konstanta:**
+```dart
+// ✅ IDE langsung warning jika salah ketik
+json[keyPizzaname]  // Error: undefined name 'keyPizzaname'
+json[keyPizzaName]  // ✓ Correct
+```
+
+**2. Maintainable (Mudah Dipelihara):**
+- ✅ **Single Source of Truth**: Kunci JSON didefinisikan di satu tempat
+- ✅ **Easy to Update**: Jika API berubah, cukup update konstanta di satu tempat
+- ✅ **Consistency**: Semua referensi menggunakan konstanta yang sama
+- ✅ **Documentation**: Konstanta di top-level berfungsi sebagai dokumentasi field yang tersedia
+
+**Contoh Skenario Maintenance:**
+
+Misal API backend mengubah field `pizzaName` menjadi `name`:
+
+**Tanpa Konstanta (❌ Rawan Error):**
+```dart
+// Harus cari dan ganti manual di banyak tempat
+factory Pizza.fromJson(Map<String, dynamic> json) {
+  pizzaName: json['pizzaName']?.toString() ?? '',  // Harus update
+}
+
+Map<String, dynamic> toJson() {
+  'pizzaName': pizzaName,  // Harus update
+}
+
+// Jika ada di tempat lain, bisa terlewat!
+void someMethod() {
+  var name = json['pizzaName'];  // Lupa update → Bug!
+}
+```
+
+**Dengan Konstanta (✅ Safe):**
+```dart
+// Cukup update di satu tempat
+const String keyPizzaName = 'name';  // Update hanya di sini
+
+// Semua referensi otomatis menggunakan nilai baru
+factory Pizza.fromJson(Map<String, dynamic> json) {
+  pizzaName: json[keyPizzaName]?.toString() ?? '',  // ✓
+}
+
+Map<String, dynamic> toJson() {
+  keyPizzaName: pizzaName,  // ✓
+}
+```
+
+**Keuntungan Praktikum 3:**
+- 🛡️ **Error Prevention**: Mencegah typo dan kesalahan penulisan
+- 🔍 **Easy Debugging**: Error terdeteksi lebih awal (compile-time vs runtime)
+- 🔧 **Easy Refactoring**: Perubahan API mudah ditangani
+- 📚 **Better Documentation**: Konstanta menjadi dokumentasi field
+- 🚀 **Team Collaboration**: Team member bisa melihat field yang tersedia dengan jelas
+
+---
