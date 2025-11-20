@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'dart:convert';
 import 'model/pizza.dart';
+import 'prefs_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -75,6 +76,18 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text(widget.title),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.storage),
+            tooltip: 'SharedPreferences Demo',
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const PrefsScreen()),
+              );
+            },
+          ),
+        ],
       ),
       body: ListView.builder(
         itemCount: myPizzas.length,
