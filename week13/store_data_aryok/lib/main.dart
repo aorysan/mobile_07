@@ -80,13 +80,27 @@ class _MyHomePageState extends State<MyHomePage> {
         itemCount: myPizzas.length,
         itemBuilder: (context, index) {
           return ListTile(
-            title: Text(myPizzas[index].pizzaName),
-            subtitle: Text(myPizzas[index].description),
-            leading: CircleAvatar(
-              child: Text(
-                '\$${myPizzas[index].price.toStringAsFixed(2)}',
-                style: const TextStyle(fontSize: 10),
-              ),
+            title: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  myPizzas[index].pizzaName.isNotEmpty
+                      ? myPizzas[index].pizzaName
+                      : 'No name',
+                ),
+                Text(
+                  '\$${myPizzas[index].price.toStringAsFixed(2)}',
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: Colors.green,
+                  ),
+                ),
+              ],
+            ),
+            subtitle: Text(
+              myPizzas[index].description.isNotEmpty
+                  ? myPizzas[index].description
+                  : 'No description',
             ),
           );
         },

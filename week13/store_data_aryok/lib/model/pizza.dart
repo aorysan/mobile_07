@@ -14,13 +14,14 @@ class Pizza {
   });
 
   // Factory constructor untuk konversi dari JSON (deserialization)
+  // dengan error handling untuk data yang tidak konsisten
   factory Pizza.fromJson(Map<String, dynamic> json) {
     return Pizza(
-      id: json['id'],
-      pizzaName: json['pizzaName'],
-      description: json['description'],
-      price: json['price'],
-      imageUrl: json['imageUrl'],
+      id: int.tryParse(json['id'].toString()) ?? 0,
+      pizzaName: json['pizzaName']?.toString() ?? '',
+      description: json['description']?.toString() ?? '',
+      price: double.tryParse(json['price'].toString()) ?? 0.0,
+      imageUrl: json['imageUrl']?.toString() ?? '',
     );
   }
 

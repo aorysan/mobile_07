@@ -394,3 +394,147 @@ Jalankan aplikasi. Periksa Debug Console untuk melihat List objek Pizza telah be
 
 Pada console, terlihat output JSON yang merupakan hasil serialization dari List objek Pizza kembali menjadi JSON String. Ini membuktikan bahwa proses deserialization (JSON → Dart Object) dan serialization (Dart Object → JSON) berjalan dengan baik.
 
+---
+
+### Praktikum 2: Handle kompatibilitas data JSON
+
+Pada praktikum ini, kita akan belajar menangani data JSON yang tidak konsisten atau "rusak", dimana tipe data mungkin tidak sesuai dengan yang diharapkan model Dart.
+
+#### Langkah 1: Simulasikan Error
+
+Anggaplah Anda telah mengganti file `pizzalist.json` dengan data yang tidak konsisten.
+
+#### Langkah 2: Lihat Error Tipe Data String ke Int
+
+Jika ID pizza di JSON dikirim sebagai String (misalnya `"id": "1"` di JSON) sementara model Dart mengharapkan int, Anda akan melihat runtime error.
+
+**Contoh Error:**
+```
+type 'String' is not a subtype of type 'int'
+```
+
+#### Langkah 3: Terapkan tryParse dan Null Coalescing pada ID
+
+Di Pizza.fromJson (file pizza.dart), ganti cara mendapatkan nilai id menggunakan `int.tryParse` dan null coalescing operator (`??`) untuk memberikan nilai default 0 jika parsing gagal atau nilainya null. Tujuannya adalah memastikan nilai id selalu integer.
+
+```dart
+id: int.tryParse(json['id'].toString()) ?? 0,
+```
+
+**Penjelasan:**
+- `json['id'].toString()`: Mengonversi nilai apapun menjadi String terlebih dahulu
+- `int.tryParse()`: Mencoba parse String ke int, return null jika gagal
+- `?? 0`: Memberikan nilai default 0 jika hasilnya null
+
+#### Langkah 4: Simulasikan Error Null pada String
+
+Jika Anda menjalankan ulang dan ada bidang yang hilang (misalnya imageUrl hilang), Anda mungkin mendapatkan error Null.
+
+**Contoh Error:**
+```
+Null check operator used on a null value
+```
+
+#### Langkah 5: Terapkan Null Coalescing pada String
+
+Tambahkan null coalescing operator (`??`) pada imageUrl untuk memberikan string kosong ('') jika nilai yang diterima adalah null. Lakukan hal yang sama untuk bidang String lainnya seperti pizzaName dan description jika perlu.
+
+```dart
+imageUrl: json['imageUrl']?.toString() ?? '',
+pizzaName: json['pizzaName']?.toString() ?? '',
+description: json['description']?.toString() ?? '',
+```
+
+**Penjelasan:**
+- `json['field']?`: Null-aware operator, return null jika json['field'] null
+- `.toString()`: Konversi ke String jika bukan null
+- `?? ''`: Berikan empty string jika hasilnya null
+
+#### Langkah 6: Gunakan toString() untuk Field String
+
+Untuk memastikan semua nilai yang digunakan sebagai String benar-benar String (bahkan jika mereka mungkin dikirim sebagai int atau tipe lain), gunakan toString().
+
+```dart
+pizzaName: json['pizzaName']?.toString() ?? '',
+description: json['description']?.toString() ?? '',
+imageUrl: json['imageUrl']?.toString() ?? '',
+```
+
+#### Langkah 7: Simulasikan Error Tipe Data String ke Double
+
+Jika Anda menjalankan ulang, Anda mungkin menemukan error saat mengonversi String ke Double untuk bidang price.
+
+**Contoh Error:**
+```
+type 'String' is not a subtype of type 'double'
+```
+
+#### Langkah 8: Terapkan double.tryParse
+
+Terapkan `double.tryParse` dengan null coalescing (`?? 0.0`) untuk bidang price, sama seperti yang Anda lakukan pada id.
+
+```dart
+price: double.tryParse(json['price'].toString()) ?? 0.0,
+```
+
+**Kode Lengkap Pizza.fromJson setelah perbaikan:**
+
+```dart
+factory Pizza.fromJson(Map<String, dynamic> json) {
+  return Pizza(
+    id: int.tryParse(json['id'].toString()) ?? 0,
+    pizzaName: json['pizzaName']?.toString() ?? '',
+    description: json['description']?.toString() ?? '',
+    price: double.tryParse(json['price'].toString()) ?? 0.0,
+    imageUrl: json['imageUrl']?.toString() ?? '',
+  );
+}
+```
+
+#### Langkah 9: Run dan Perhatikan Output Null
+
+Setelah mengimplementasikan semua perbaikan tipe data, aplikasi akan berjalan, tetapi mungkin menampilkan "null" di UI jika ada bidang yang hilang atau gagal diparsing (seperti pizzaName atau description).
+
+#### Langkah 10: Tambahkan Operator Ternary untuk Output User-Friendly
+
+Perbaiki masalah tampilan "null" dengan menambahkan operator ternary yang memeriksa apakah nilai null sebelum mengubahnya menjadi String. Jika null, berikan nilai pengganti yang ramah pengguna seperti 'No name' atau string kosong ('').
+
+**Di main.dart, update ListView.builder:**
+
+```dart
+itemBuilder: (context, index) {
+  return ListTile(
+    title: Text(
+      myPizzas[index].pizzaName.isNotEmpty
+          ? myPizzas[index].pizzaName
+          : 'No name',
+    ),
+    subtitle: Text(
+      myPizzas[index].description.isNotEmpty
+          ? myPizzas[index].description
+          : 'No description',
+    ),
+    leading: CircleAvatar(
+      child: Text(
+        '\$${myPizzas[index].price.toStringAsFixed(2)}',
+        style: const TextStyle(fontSize: 10),
+      ),
+    ),
+  );
+},
+```
+
+**Penjelasan:**
+- `pizzaName.isNotEmpty ? pizzaName : 'No name'`: Cek apakah string kosong, jika ya tampilkan 'No name'
+- Ini mencegah tampilan data yang tidak lengkap terlihat profesional di UI
+
+#### Langkah 11: Run
+
+Jalankan aplikasi. Sekarang data yang tidak konsisten telah ditangani dengan baik, dan UI tidak menampilkan nilai null.
+
+##### Soal 4
+
+- Capture hasil running aplikasi Anda, kemudian impor ke laporan praktikum Anda!
+- Laku lakukan commit dengan pesan "W13: Jawaban Soal 4".
+
+![alt text](image-2.png)
