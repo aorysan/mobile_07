@@ -185,7 +185,7 @@ body: Center(
 
 Jika kode sudah benar, seharusnya tampil seperti gambar berikut ini.
 
-![alt text](image.png)
+![alt text](gifNImg/image.png)
 
 ##### Soal 2
 
@@ -388,7 +388,7 @@ return myPizzas;
 
 Jalankan aplikasi. Periksa Debug Console untuk melihat List objek Pizza telah berhasil dikonversi kembali menjadi JSON String.
 
-![alt text](image-1.png)
+![alt text](gifNImg/image-1.png)
 
 **Penjelasan:**
 
@@ -537,7 +537,7 @@ Jalankan aplikasi. Sekarang data yang tidak konsisten telah ditangani dengan bai
 - Capture hasil running aplikasi Anda, kemudian impor ke laporan praktikum Anda!
 - Laku lakukan commit dengan pesan "W13: Jawaban Soal 4".
 
-![alt text](image-2.png)
+![alt text](gifNImg/image-2.png)
 
 **Jawaban:**
 
@@ -634,7 +634,7 @@ Jalankan aplikasi. Tidak akan ada perubahan visual, tetapi kode Anda kini lebih 
 
 **Jawaban:**
 
-![alt text](image-3.png)
+![alt text](gifNImg/image-3.png)
 
 **Maksud "More Safe and Maintainable":**
 
@@ -906,7 +906,7 @@ Widget build(BuildContext context) {
 
 Aplikasi sekarang akan menampilkan "You have opened the app 1 times" (jika ini pembukaan pertama).
 
-![alt text](image-4.png)
+![alt text](gifNImg/image-4.png)
 
 #### Langkah 13: Buat Method deletePreference()
 
@@ -952,7 +952,7 @@ Jalankan aplikasi. Tombol reset sekarang akan berfungsi, menghapus semua pasanga
 
 **Jawaban:**
 
-![alt text](gif.gif)
+![alt text](gifNImg/gif.gif)
 
 ### Praktikum 5: Menggunakan path_provider
 
@@ -1143,7 +1143,7 @@ Jalankan aplikasi. Anda akan melihat path untuk documents directory dan temporar
 
 **Jawaban:**
 
-![alt text](image-6.png)
+![alt text](gifNImg/image-6.png)
 
 
 ---
@@ -1298,7 +1298,7 @@ Jalankan aplikasi. Setelah menekan tombol 'Read File', konten yang ditulis (Aryo
 
 **Jawaban:**
 
-![alt text](gif1.gif)
+![alt text](gifNImg/gif1.gif)
 
 **Penjelasan Langkah 3 (writeFile):**
 
@@ -1543,4 +1543,4 @@ Jalankan aplikasi. Masukkan teks, simpan, lalu baca kembali. Teks tersebut sehar
 - Capture hasil praktikum Anda berupa GIF dan lampirkan di README.
 - Lalu lakukan commit dengan pesan "W13: Jawaban Soal 9".
 
-![alt text](gif2.gif)
+![alt text](gifNImg/gif2.gif)
