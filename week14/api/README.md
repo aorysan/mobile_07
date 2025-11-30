@@ -297,3 +297,226 @@ Menjalankan aplikasi dan testing POST functionality.
 
 ##### Soal 2
 ![alt text](gif.gif)
+
+---
+
+### Praktikum 3: Memperbarui Data di Web Service (PUT)
+
+Praktikum ini bertujuan untuk mempelajari cara memperbarui data yang sudah ada di web service menggunakan HTTP PUT method. PUT digunakan untuk mengupdate data yang sudah tersimpan di server.
+
+#### Langkah 1: Setup Stub PUT di Wire Mock
+
+Membuat stub baru untuk endpoint PUT di Wire Mock Cloud:
+
+**Konfigurasi:**
+- Name: `Put Pizza`
+- Verb: `PUT`
+- Address: `/pizza`
+- Status: `200` (OK)
+- Body Type: `JSON`
+- Body Response: `{"message": "Pizza was updated"}`
+
+**Catatan:** PUT menggunakan endpoint yang sama dengan POST (`/pizza`), yang membedakan hanya HTTP verb-nya.
+
+#### Langkah 2: Tambahkan method putPizza di HttpHelper
+
+Menambahkan method `putPizza()` di class `HttpHelper` untuk melakukan PUT request.
+
+**Link kode:** [lib/httphelper.dart - putPizza](https://github.com/aorysan/mobile_07/blob/main/week14/api/lib/httphelper.dart#L31-L41)
+
+**Penjelasan method putPizza():**
+```dart
+Future<String> putPizza(Pizza pizza) async {
+  const putPath = '/pizza';
+  String put = json.encode(pizza.toJson());
+  Uri url = Uri.https(authority, putPath);
+  http.Response r = await http.put(
+    url,
+    body: put,
+    headers: {'Content-Type': 'application/json'},
+  );
+  return r.body;
+}
+```
+
+**Perbedaan dengan POST:**
+- Method: `http.put()` vs `http.post()`
+- Status code: 200 (OK) vs 201 (Created)
+- Tujuan: Update data existing vs Create data baru
+- Idempotent: Ya (bisa dipanggil berulang dengan hasil sama)
+
+#### Langkah 3: Modifikasi PizzaDetailScreen
+
+Menambahkan parameter `pizza` dan `isNew` untuk mendukung mode CREATE dan UPDATE.
+
+**Link kode:** [lib/pizza_detail.dart - constructor](https://github.com/aorysan/mobile_07/blob/main/week14/api/lib/pizza_detail.dart#L5-L13)
+
+**Perubahan:**
+```dart
+class PizzaDetailScreen extends StatefulWidget {
+  final Pizza pizza;      // Pizza object untuk edit mode
+  final bool isNew;       // Flag: true = POST, false = PUT
+  
+  const PizzaDetailScreen({
+    super.key,
+    required this.pizza,
+    required this.isNew,
+  });
+}
+```
+
+**Kegunaan parameter:**
+- `pizza`: Object yang akan diedit (kosong jika create new)
+- `isNew`: Menentukan menggunakan POST atau PUT
+
+#### Langkah 4: Override initState untuk Populate Form
+
+Menambahkan logic untuk populate TextField saat edit mode.
+
+**Link kode:** [lib/pizza_detail.dart - initState](https://github.com/aorysan/mobile_07/blob/main/week14/api/lib/pizza_detail.dart#L22-L32)
+
+**Penjelasan:**
+```dart
+@override
+void initState() {
+  if (!widget.isNew) {
+    // Populate fields dengan data existing
+    txtId.text = widget.pizza.id.toString();
+    txtName.text = widget.pizza.pizzaName ?? '';
+    txtDescription.text = widget.pizza.description ?? '';
+    txtPrice.text = widget.pizza.price.toString();
+    txtImageUrl.text = widget.pizza.imageUrl ?? '';
+  }
+  super.initState();
+}
+```
+
+**Alur:**
+- Jika `isNew = false` (edit mode), isi form dengan data existing
+- Jika `isNew = true` (create mode), form tetap kosong
+- Menggunakan null-coalescing (`??`) untuk safety
+
+#### Langkah 5: Modifikasi method savePizza
+
+Mengubah `postPizza()` menjadi `savePizza()` yang support POST dan PUT.
+
+**Link kode:** [lib/pizza_detail.dart - savePizza](https://github.com/aorysan/mobile_07/blob/main/week14/api/lib/pizza_detail.dart#L41-L56)
+
+**Penjelasan:**
+```dart
+Future savePizza() async {
+  HttpHelper helper = HttpHelper();
+  Pizza pizza = Pizza();
+  // Ambil data dari form
+  pizza.id = int.tryParse(txtId.text);
+  pizza.pizzaName = txtName.text;
+  pizza.description = txtDescription.text;
+  pizza.price = double.tryParse(txtPrice.text);
+  pizza.imageUrl = txtImageUrl.text;
+  
+  // Ternary: pilih POST atau PUT
+  final result = await (widget.isNew
+      ? helper.postPizza(pizza)
+      : helper.putPizza(pizza));
+  
+  setState(() {
+    operationResult = result;
+  });
+}
+```
+
+**Conditional logic:**
+- `widget.isNew = true` → call `postPizza()`
+- `widget.isNew = false` → call `putPizza()`
+- Single method untuk handle both operations
+
+#### Langkah 6: Update Button Text
+
+Mengubah text button sesuai mode operasi.
+
+**Link kode:** [lib/pizza_detail.dart - button](https://github.com/aorysan/mobile_07/blob/main/week14/api/lib/pizza_detail.dart#L115-L120)
+
+**Perubahan:**
+```dart
+ElevatedButton(
+  child: Text(widget.isNew ? 'Add Pizza' : 'Update Pizza'),
+  onPressed: () {
+    savePizza();
+  },
+)
+```
+
+**UX improvement:**
+- Create mode: "Add Pizza"
+- Edit mode: "Update Pizza"
+- Memberikan clarity ke user tentang action yang dilakukan
+
+#### Langkah 7: Tambahkan onTap di ListTile
+
+Menambahkan handler untuk tap pada list item untuk masuk ke edit mode.
+
+**Link kode:** [lib/main.dart - onTap](https://github.com/aorysan/mobile_07/blob/main/week14/api/lib/main.dart#L101-L111)
+
+**Penjelasan:**
+```dart
+return ListTile(
+  title: Text(snapshot.data![position].pizzaName ?? 'Unnamed Pizza'),
+  subtitle: Text(
+    '${snapshot.data![position].description} - € ${snapshot.data![position].price.toString()}',
+  ),
+  onTap: () {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => PizzaDetailScreen(
+          pizza: snapshot.data![position],  // Pass pizza object
+          isNew: false,                     // Edit mode
+        ),
+      ),
+    );
+  },
+);
+```
+
+**Behavior:**
+- User tap pizza item → Navigate ke detail screen
+- Form ter-populate dengan data pizza yang dipilih
+- Button menampilkan "Update Pizza"
+
+#### Langkah 8: Update FloatingActionButton
+
+Mengupdate FAB untuk pass parameter yang diperlukan.
+
+**Link kode:** [lib/main.dart - FAB](https://github.com/aorysan/mobile_07/blob/main/week14/api/lib/main.dart#L118-L130)
+
+**Penjelasan:**
+```dart
+floatingActionButton: FloatingActionButton(
+  child: const Icon(Icons.add),
+  onPressed: () {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => PizzaDetailScreen(
+          pizza: Pizza(),    // Empty pizza object
+          isNew: true,       // Create mode
+        ),
+      ),
+    );
+  },
+)
+```
+
+**Behavior:**
+- User tap FAB (+) → Navigate ke detail screen
+- Form kosong untuk input data baru
+- Button menampilkan "Add Pizza"
+
+#### Langkah 9: Run dan Test
+
+Menjalankan aplikasi dan testing PUT functionality.
+
+##### Soal 3
+
+![alt text](gif1.gif)
+

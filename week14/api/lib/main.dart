@@ -94,10 +94,23 @@ class _MyHomePageState extends State<MyHomePage> {
             itemCount: (snapshot.data == null) ? 0 : snapshot.data!.length,
             itemBuilder: (BuildContext context, int position) {
               return ListTile(
-                title: Text(snapshot.data![position].pizzaName ?? 'Unnamed Pizza'),
+                title: Text(
+                  snapshot.data![position].pizzaName ?? 'Unnamed Pizza',
+                ),
                 subtitle: Text(
                   '${snapshot.data![position].description} - € ${snapshot.data![position].price.toString()}',
                 ),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => PizzaDetailScreen(
+                        pizza: snapshot.data![position],
+                        isNew: false,
+                      ),
+                    ),
+                  );
+                },
               );
             },
           );
@@ -108,7 +121,10 @@ class _MyHomePageState extends State<MyHomePage> {
         onPressed: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => const PizzaDetailScreen()),
+            MaterialPageRoute(
+              builder: (context) =>
+                  PizzaDetailScreen(pizza: Pizza(), isNew: true),
+            ),
           );
         },
       ),
