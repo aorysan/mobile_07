@@ -296,7 +296,34 @@ floatingActionButton: FloatingActionButton(
 Menjalankan aplikasi dan testing POST functionality.
 
 ##### Soal 2
-![alt text](gif.gif)
+
+**Screenshot hasil:**
+
+![alt text](gif1.gif)
+
+WireMock hanya mengembalikan response statis yang sudah dikonfigurasi, tanpa benar-benar menyimpan data ke database. Ini berbeda dengan backend API yang real.
+
+**Cara Memverifikasi POST Berhasil:**
+
+1. **Cek Request Logs di WireMock:**
+   - Login ke [WireMock Cloud](https://app.wiremock.cloud/)
+   - Buka Mock API Anda
+   - Klik tab **"Requests"** atau **"Request Logs"**
+   - Lihat request POST yang masuk dengan body data yang dikirim
+
+2. **Cek Debug Console:**
+   - Print statement: `print('POST Response: ${r.body}')`
+   - Lihat output: `{"message": "The pizza was posted"}`
+   - Ini membuktikan request berhasil dikirim dan response diterima
+
+3. **Response di UI:**
+   - Text hijau muncul di atas form
+   - Menampilkan message dari server
+
+**Catatan:**
+- GET akan selalu return data statis yang sama (data awal dari stub)
+- POST/PUT hanya mensimulasikan operasi, tidak mengubah data di stub GET
+- Untuk data persistent, gunakan backend API yang real (Node.js, Laravel, dll)
 
 ---
 
@@ -519,4 +546,65 @@ Menjalankan aplikasi dan testing PUT functionality.
 ##### Soal 3
 
 ![alt text](gif1.gif)
+
+**Penjelasan:**
+- Tap pada salah satu pizza dari list
+- Form ter-populate dengan data existing
+- Edit field yang diinginkan (contoh: nama menjadi "Aryo Adi Putro - 2341720084")
+- Tekan "Update Pizza"
+- Response "Pizza was updated" muncul
+
+**Cara Memverifikasi PUT Berhasil di WireMock:**
+
+1. **Cek Request Logs:**
+   - Login ke [WireMock Cloud](https://app.wiremock.cloud/)
+   - Buka Mock API Anda
+   - Klik tab **"Requests"** atau **"Request Logs"**
+   - Cari request dengan method **PUT** ke endpoint `/pizza`
+   - Klik request untuk melihat detail:
+     - Request Body: Data yang dikirim dari form
+     - Response: `{"message": "Pizza was updated"}`
+     - Timestamp: Waktu request diterima
+
+2. **Screenshot Request Logs:**
+   
+   ![WireMock Request Logs](screenshots/wiremock_logs.png)
+   
+   Contoh informasi yang terlihat:
+   ```json
+   Method: PUT
+   Path: /pizza
+   Body: {
+     "id": 1,
+     "pizzaName": "Aryo Adi Putro - 2341720084",
+     "description": "Pizza with tomato...",
+     "price": 8.75,
+     "imageUrl": "images/margherita.png"
+   }
+   Response: {"message": "Pizza was updated"}
+   Status: 200
+   ```
+
+3. **Verifikasi di Debug Console:**
+   - Output: `PUT Response: {"message": "Pizza was updated"}`
+   - Membuktikan request PUT berhasil
+
+**⚠️ Catatan Penting: Mengapa Data di ListView Tidak Berubah?**
+
+**WireMock adalah Mock API (simulasi) yang TIDAK menyimpan data secara persistent.**
+
+- WireMock hanya mengembalikan response statis yang sudah dikonfigurasi
+- GET stub tetap return data awal yang sama
+- POST/PUT hanya mensimulasikan operasi tanpa mengubah data di stub GET
+- Ini adalah **behavior yang normal** untuk mock API
+
+**Untuk melihat perubahan data yang persistent:**
+- Gunakan backend API yang real (Node.js + MongoDB, Laravel + MySQL, dll)
+- Atau gunakan mock service dengan storage seperti JSON Server
+
+**Cara Membuktikan POST/PUT Berhasil:**
+1. ✅ Response message muncul di UI (`"Pizza was updated"`)
+2. ✅ Debug console menampilkan response
+3. ✅ Request logs di WireMock menunjukkan request masuk dengan body yang benar
+
 
