@@ -100,8 +100,8 @@ class _MyHomePageState extends State<MyHomePage> {
                 subtitle: Text(
                   '${snapshot.data![position].description} - € ${snapshot.data![position].price.toString()}',
                 ),
-                onTap: () {
-                  Navigator.push(
+                onTap: () async {
+                  await Navigator.push(
                     context,
                     MaterialPageRoute(
                       builder: (context) => PizzaDetailScreen(
@@ -110,6 +110,8 @@ class _MyHomePageState extends State<MyHomePage> {
                       ),
                     ),
                   );
+                  // Refresh list after returning from detail
+                  setState(() {});
                 },
               );
             },

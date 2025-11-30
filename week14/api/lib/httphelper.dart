@@ -40,6 +40,14 @@ class HttpHelper {
     return r.body;
   }
 
+  Future<String> deletePizza(int id) async {
+    const deletePath = '/pizza';
+    Uri url = Uri.https(authority, deletePath);
+    http.Response r = await http.delete(url);
+    print('DELETE Response: ${r.body}'); // Debug
+    return r.body;
+  }
+
   Future<List<Pizza>> getPizzaList() async {
     final Uri url = Uri.https(authority, path);
     final http.Response result = await http.get(url);

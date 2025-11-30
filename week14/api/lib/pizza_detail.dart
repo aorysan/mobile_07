@@ -64,6 +64,21 @@ class _PizzaDetailScreenState extends State<PizzaDetailScreen> {
     });
   }
 
+  Future deletePizza() async {
+    HttpHelper helper = HttpHelper();
+    final result = await helper.deletePizza(widget.pizza.id!);
+
+    setState(() {
+      operationResult = result;
+    });
+
+    // Wait a bit to show the message, then go back
+    await Future.delayed(const Duration(seconds: 2));
+    if (context.mounted) {
+      Navigator.pop(context);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -132,6 +147,19 @@ class _PizzaDetailScreenState extends State<PizzaDetailScreen> {
                   savePizza();
                 },
               ),
+              if (!widget.isNew) ...[
+                const SizedBox(height: 16),
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.red,
+                    foregroundColor: Colors.white,
+                  ),
+                  child: const Text('Delete Pizza'),
+                  onPressed: () {
+                    deletePizza();
+                  },
+                ),
+              ],
             ],
           ),
         ),

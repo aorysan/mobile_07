@@ -607,4 +607,146 @@ Menjalankan aplikasi dan testing PUT functionality.
 2. ✅ Debug console menampilkan response
 3. ✅ Request logs di WireMock menunjukkan request masuk dengan body yang benar
 
+---
+
+### Praktikum 4: Menghapus Data dari Web Service (DELETE)
+
+Praktikum ini bertujuan untuk mempelajari cara menghapus data dari web service menggunakan HTTP DELETE method. DELETE digunakan untuk menghapus data yang sudah tersimpan di server. Implementasi menggunakan Dismissible widget untuk swipe to delete.
+
+#### Langkah 1: Setup Stub DELETE di Wire Mock
+
+Membuat stub baru untuk endpoint DELETE di Wire Mock Cloud:
+
+**Konfigurasi:**
+- Name: `Delete Pizza`
+- Verb: `DELETE`
+- Address: `/pizza`
+- Status: `200` (OK)
+- Body Type: `JSON`
+- Body Response: `{"message": "Pizza was deleted"}`
+
+#### Langkah 2: Tambahkan method deletePizza di HttpHelper
+
+Menambahkan method `deletePizza()` di class `HttpHelper` untuk melakukan DELETE request.
+
+**Link kode:** [lib/httphelper.dart - deletePizza](https://github.com/aorysan/mobile_07/blob/main/week14/api/lib/httphelper.dart#L44-L52)
+
+**Penjelasan method deletePizza():**
+```dart
+Future<String> deletePizza(int id) async {
+  const deletePath = '/pizza';
+  Uri url = Uri.https(authority, deletePath);
+  http.Response r = await http.delete(url);
+  print('DELETE Response: ${r.body}'); // Debug
+  return r.body;
+}
+```
+
+**Detail implementasi:**
+- Parameter: `int id` untuk identifikasi pizza yang akan dihapus
+- Method: `http.delete()` untuk DELETE request
+- Tidak memerlukan body (berbeda dengan POST/PUT)
+- Tidak memerlukan header Content-Type karena tidak ada body
+- Return: Response body dari server
+
+#### Langkah 3: Implementasi Dismissible Widget
+
+Membungkus `ListTile` dengan `Dismissible` widget untuk swipe to delete functionality.
+
+**Link kode:** [lib/main.dart - Dismissible](https://github.com/aorysan/mobile_07/blob/main/week14/api/lib/main.dart#L60-L114)
+
+**Penjelasan komponen Dismissible:**
+
+1. **key: Key()**
+   ```dart
+   key: Key(snapshot.data![position].id.toString())
+   ```
+   - Unique key untuk setiap item
+   - Menggunakan ID pizza sebagai identifier
+   - Diperlukan untuk tracking widget yang di-dismiss
+
+2. **onDismissed callback:**
+   ```dart
+   onDismissed: (direction) {
+     HttpHelper helper = HttpHelper();
+     // Remove dari local list (update UI)
+     snapshot.data!.removeWhere(
+       (element) => element.id == snapshot.data![position].id,
+     );
+     // Call DELETE API
+     helper.deletePizza(snapshot.data![position].id!);
+   }
+   ```
+   
+   **Alur operasi:**
+   - User swipe item → `onDismissed` triggered
+   - Remove item dari list lokal (UI update instant)
+   - Call `deletePizza()` ke API (background operation)
+   - API response di-log ke debug console
+
+3. **background:**
+   ```dart
+   background: Container(
+     color: Colors.red,
+     alignment: Alignment.centerRight,
+     padding: const EdgeInsets.only(right: 20),
+     child: const Icon(
+       Icons.delete,
+       color: Colors.white,
+     ),
+   )
+   ```
+   
+   **UX enhancement:**
+   - Background merah muncul saat swipe
+   - Icon delete di sebelah kanan
+   - Visual feedback yang jelas untuk destructive action
+
+4. **child: ListTile**
+   - Widget yang bisa di-swipe
+   - Berisi tampilan pizza item
+   - Tetap support `onTap` untuk edit
+
+**Keuntungan Dismissible:**
+- ✅ Gesture intuitif (swipe to delete)
+- ✅ Animasi smooth
+- ✅ Visual feedback dengan background
+- ✅ Konsisten dengan Material Design pattern
+- ✅ UX yang familiar untuk user mobile
+
+#### Langkah 4: Run dan Test
+
+Menjalankan aplikasi dan testing DELETE functionality.
+
+##### Soal 4
+
+**Screenshot hasil:**
+
+![alt text](gif2.gif)
+
+**Cara Memverifikasi DELETE Berhasil di WireMock:**
+
+1. **Cek Request Logs:**
+   - Login ke [WireMock Cloud](https://app.wiremock.cloud/)
+   - Buka Mock API Anda
+   - Klik tab **"Requests"** atau **"Request Logs"**
+   - Cari request dengan method **DELETE** ke endpoint `/pizza`
+   - Klik request untuk melihat detail:
+     - Method: DELETE
+     - Path: /pizza
+     - Response: `{"message": "Pizza was deleted"}`
+     - Status: 200
+
+2. **Verifikasi di Debug Console:**
+   - Output: `DELETE Response: {"message": "Pizza was deleted"}`
+   - Membuktikan request DELETE berhasil
+
+**⚠️ Catatan Penting tentang Mock API:**
+
+Sama seperti POST dan PUT, **DELETE di WireMock hanya mensimulasikan operasi** tanpa benar-benar menghapus data dari stub GET.
+
+- Item hilang dari UI karena `removeWhere()` pada list lokal
+- Jika app di-restart, data akan kembali muncul (data di-fetch dari stub GET yang statis)
+- Request logs di WireMock membuktikan request DELETE berhasil dikirim dan diterima
+- Untuk data persistent yang benar-benar terhapus, gunakan backend API yang real
 
