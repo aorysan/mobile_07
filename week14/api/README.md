@@ -11,6 +11,7 @@ Praktikum ini bertujuan untuk mempelajari cara menggunakan RESTful API dengan Fl
 Mendaftar untuk layanan Mock Lab di [https://app.wiremock.cloud/](https://app.wiremock.cloud/) dan membuat stub baru dengan nama "Pizza List".
 
 **Setup stub:**
+
 - Name: `Pizza List`
 - Verb: `GET`
 - URL: `/pizzalist`
@@ -31,6 +32,7 @@ Membuat file `pizza.dart` yang berisi model data Pizza dengan method `fromJson()
 **Link kode:** [lib/pizza.dart](https://github.com/aorysan/mobile_07/blob/main/week14/api/lib/pizza.dart#L1-L38)
 
 **Penjelasan:**
+
 - **Constructor Pizza**: Menerima semua field yang required
 - **fromJson()**: Factory constructor yang mengonversi Map dari JSON menjadi objek Pizza
 - **toJson()**: Method yang mengonversi objek Pizza kembali menjadi Map untuk serialization
@@ -42,6 +44,7 @@ Membuat file `httphelper.dart` yang berisi class `HttpHelper` dengan singleton p
 **Link kode:** [lib/httphelper.dart](https://github.com/aorysan/mobile_07/blob/main/week14/api/lib/httphelper.dart#L1-L32)
 
 **Penjelasan Singleton Pattern:**
+
 ```dart
 static final HttpHelper _httpHelper = HttpHelper._internal();
 HttpHelper._internal();
@@ -51,12 +54,14 @@ factory HttpHelper() {
 ```
 
 **Keuntungan Singleton Pattern:**
+
 - Hanya membuat satu instance dari class `HttpHelper` di seluruh aplikasi
 - Menghemat memory dan resource
 - Memastikan konsistensi konfigurasi
 - Menghindari pembuatan instance berulang kali
 
 **Method getPizzaList():**
+
 - Menggunakan `Uri.https()` untuk membuat URL
 - Melakukan GET request menggunakan `http.get()`
 - Mengecek status code apakah `HttpStatus.ok` (200)
@@ -72,9 +77,11 @@ Mengupdate `main.dart` untuk menggunakan `HttpHelper` dan menampilkan data pizza
 **Perubahan yang dilakukan:**
 
 1. **Import dependencies:**
+
    - Import `httphelper.dart` dan `pizza.dart`
 
 2. **Ubah title dan tema:**
+
    ```dart
    title: 'Pizza App - Aryok',
    theme: ThemeData(
@@ -83,6 +90,7 @@ Mengupdate `main.dart` untuk menggunakan `HttpHelper` dan menampilkan data pizza
    ```
 
 3. **Buat method callPizzas():**
+
    ```dart
    Future<List<Pizza>> callPizzas() async {
      HttpHelper helper = HttpHelper();
@@ -109,6 +117,7 @@ Mengupdate `main.dart` untuk menggunakan `HttpHelper` dan menampilkan data pizza
   - `data`: Data yang dikembalikan dari Future
 
 **ListView.builder:**
+
 - `itemCount`: Jumlah item yang akan ditampilkan
 - `itemBuilder`: Function yang membangun setiap item
 - Menampilkan nama pizza, deskripsi, dan harga dalam `ListTile`
@@ -119,7 +128,7 @@ Menjalankan aplikasi dan melihat daftar pizza yang diambil dari Mock API.
 
 ##### Soal 1
 
-![alt text](image.png)
+![alt text](imgngif/image.png)
 
 ---
 
@@ -132,6 +141,7 @@ Praktikum ini bertujuan untuk mempelajari cara mengirim data ke web service meng
 Membuat stub baru untuk endpoint POST di Wire Mock Cloud:
 
 **Konfigurasi:**
+
 - Name: `Post Pizza`
 - Verb: `POST`
 - Address: `/pizza`
@@ -146,6 +156,7 @@ Mengubah class Pizza menjadi mutable (nullable fields) agar bisa digunakan untuk
 **Link kode:** [lib/pizza.dart](https://github.com/aorysan/mobile_07/blob/main/week14/api/lib/pizza.dart#L1-L39)
 
 **Perubahan:**
+
 ```dart
 // Dari final (immutable) menjadi nullable (mutable)
 int? id;
@@ -156,6 +167,7 @@ String? imageUrl;
 ```
 
 **Alasan perubahan:**
+
 - Properties nullable memungkinkan pembuatan objek Pizza kosong
 - Memudahkan assignment dari TextEditingController
 - Cocok untuk form input yang belum terisi
@@ -167,6 +179,7 @@ Menambahkan method `postPizza()` di class `HttpHelper` untuk melakukan POST requ
 **Link kode:** [lib/httphelper.dart](https://github.com/aorysan/mobile_07/blob/main/week14/api/lib/httphelper.dart#L18-L28)
 
 **Penjelasan method postPizza():**
+
 ```dart
 Future<String> postPizza(Pizza pizza) async {
   const postPath = '/pizza';
@@ -182,6 +195,7 @@ Future<String> postPizza(Pizza pizza) async {
 ```
 
 **Detail implementasi:**
+
 - `json.encode()`: Mengkonversi Map dari `toJson()` menjadi JSON string
 - `http.post()`: Melakukan POST request dengan body JSON
 - `headers`: Menambahkan Content-Type untuk memberitahu server bahwa data adalah JSON
@@ -196,6 +210,7 @@ Membuat file `pizza_detail.dart` yang berisi form untuk input data pizza baru.
 **Komponen utama:**
 
 1. **TextEditingController** (5 buah):
+
    - `txtId`: Input ID pizza
    - `txtName`: Input nama pizza
    - `txtDescription`: Input deskripsi
@@ -203,6 +218,7 @@ Membuat file `pizza_detail.dart` yang berisi form untuk input data pizza baru.
    - `txtImageUrl`: Input URL gambar
 
 2. **operationResult**:
+
    - String untuk menyimpan response dari server
    - Ditampilkan di atas form dengan background hijau
 
@@ -219,6 +235,7 @@ Membuat UI form dengan TextField untuk setiap property Pizza.
 **Link kode:** [build() method](https://github.com/aorysan/mobile_07/blob/main/week14/api/lib/pizza_detail.dart#L42-L123)
 
 **Struktur UI:**
+
 - `Scaffold` dengan AppBar
 - `SingleChildScrollView` untuk scrollable form
 - `Column` berisi:
@@ -227,6 +244,7 @@ Membuat UI form dengan TextField untuk setiap property Pizza.
   - ElevatedButton untuk trigger POST
 
 **Fitur TextField:**
+
 - Border outline untuk visual yang jelas
 - HintText sebagai placeholder
 - KeyboardType sesuai tipe data (number, text)
@@ -238,21 +256,22 @@ Membuat method untuk mengambil data dari form dan mengirim ke server.
 **Link kode:** [postPizza() method](https://github.com/aorysan/mobile_07/blob/main/week14/api/lib/pizza_detail.dart#L29-L40)
 
 **Penjelasan:**
+
 ```dart
 Future postPizza() async {
   HttpHelper helper = HttpHelper();
   Pizza pizza = Pizza(); // Buat objek kosong
-  
+
   // Ambil data dari controllers
   pizza.id = int.tryParse(txtId.text);
   pizza.pizzaName = txtName.text;
   pizza.description = txtDescription.text;
   pizza.price = double.tryParse(txtPrice.text);
   pizza.imageUrl = txtImageUrl.text;
-  
+
   // POST ke server
   String result = await helper.postPizza(pizza);
-  
+
   // Update UI dengan response
   setState(() {
     operationResult = result;
@@ -261,6 +280,7 @@ Future postPizza() async {
 ```
 
 **Kegunaan tryParse:**
+
 - `int.tryParse()`: Konversi string ke int, return null jika gagal
 - `double.tryParse()`: Konversi string ke double, return null jika gagal
 - Mencegah error jika user input invalid
@@ -272,6 +292,7 @@ Menambahkan FAB di main screen untuk navigasi ke form detail.
 **Link kode:** [FloatingActionButton](https://github.com/aorysan/mobile_07/blob/main/week14/api/lib/main.dart#L68-L78)
 
 **Penjelasan:**
+
 ```dart
 floatingActionButton: FloatingActionButton(
   child: const Icon(Icons.add),
@@ -287,6 +308,7 @@ floatingActionButton: FloatingActionButton(
 ```
 
 **Navigator.push:**
+
 - Menambahkan route baru ke navigation stack
 - MaterialPageRoute: Transition animation default Material Design
 - User bisa kembali dengan back button
@@ -299,19 +321,21 @@ Menjalankan aplikasi dan testing POST functionality.
 
 **Screenshot hasil:**
 
-![alt text](gif1.gif)
+![alt text](imgngif/gif1.gif)
 
 WireMock hanya mengembalikan response statis yang sudah dikonfigurasi, tanpa benar-benar menyimpan data ke database. Ini berbeda dengan backend API yang real.
 
 **Cara Memverifikasi POST Berhasil:**
 
 1. **Cek Request Logs di WireMock:**
+
    - Login ke [WireMock Cloud](https://app.wiremock.cloud/)
    - Buka Mock API Anda
    - Klik tab **"Requests"** atau **"Request Logs"**
    - Lihat request POST yang masuk dengan body data yang dikirim
 
 2. **Cek Debug Console:**
+
    - Print statement: `print('POST Response: ${r.body}')`
    - Lihat output: `{"message": "The pizza was posted"}`
    - Ini membuktikan request berhasil dikirim dan response diterima
@@ -321,6 +345,7 @@ WireMock hanya mengembalikan response statis yang sudah dikonfigurasi, tanpa ben
    - Menampilkan message dari server
 
 **Catatan:**
+
 - GET akan selalu return data statis yang sama (data awal dari stub)
 - POST/PUT hanya mensimulasikan operasi, tidak mengubah data di stub GET
 - Untuk data persistent, gunakan backend API yang real (Node.js, Laravel, dll)
@@ -336,6 +361,7 @@ Praktikum ini bertujuan untuk mempelajari cara memperbarui data yang sudah ada d
 Membuat stub baru untuk endpoint PUT di Wire Mock Cloud:
 
 **Konfigurasi:**
+
 - Name: `Put Pizza`
 - Verb: `PUT`
 - Address: `/pizza`
@@ -352,6 +378,7 @@ Menambahkan method `putPizza()` di class `HttpHelper` untuk melakukan PUT reques
 **Link kode:** [lib/httphelper.dart - putPizza](https://github.com/aorysan/mobile_07/blob/main/week14/api/lib/httphelper.dart#L31-L41)
 
 **Penjelasan method putPizza():**
+
 ```dart
 Future<String> putPizza(Pizza pizza) async {
   const putPath = '/pizza';
@@ -367,6 +394,7 @@ Future<String> putPizza(Pizza pizza) async {
 ```
 
 **Perbedaan dengan POST:**
+
 - Method: `http.put()` vs `http.post()`
 - Status code: 200 (OK) vs 201 (Created)
 - Tujuan: Update data existing vs Create data baru
@@ -379,11 +407,12 @@ Menambahkan parameter `pizza` dan `isNew` untuk mendukung mode CREATE dan UPDATE
 **Link kode:** [lib/pizza_detail.dart - constructor](https://github.com/aorysan/mobile_07/blob/main/week14/api/lib/pizza_detail.dart#L5-L13)
 
 **Perubahan:**
+
 ```dart
 class PizzaDetailScreen extends StatefulWidget {
   final Pizza pizza;      // Pizza object untuk edit mode
   final bool isNew;       // Flag: true = POST, false = PUT
-  
+
   const PizzaDetailScreen({
     super.key,
     required this.pizza,
@@ -393,6 +422,7 @@ class PizzaDetailScreen extends StatefulWidget {
 ```
 
 **Kegunaan parameter:**
+
 - `pizza`: Object yang akan diedit (kosong jika create new)
 - `isNew`: Menentukan menggunakan POST atau PUT
 
@@ -403,6 +433,7 @@ Menambahkan logic untuk populate TextField saat edit mode.
 **Link kode:** [lib/pizza_detail.dart - initState](https://github.com/aorysan/mobile_07/blob/main/week14/api/lib/pizza_detail.dart#L22-L32)
 
 **Penjelasan:**
+
 ```dart
 @override
 void initState() {
@@ -419,6 +450,7 @@ void initState() {
 ```
 
 **Alur:**
+
 - Jika `isNew = false` (edit mode), isi form dengan data existing
 - Jika `isNew = true` (create mode), form tetap kosong
 - Menggunakan null-coalescing (`??`) untuk safety
@@ -430,6 +462,7 @@ Mengubah `postPizza()` menjadi `savePizza()` yang support POST dan PUT.
 **Link kode:** [lib/pizza_detail.dart - savePizza](https://github.com/aorysan/mobile_07/blob/main/week14/api/lib/pizza_detail.dart#L41-L56)
 
 **Penjelasan:**
+
 ```dart
 Future savePizza() async {
   HttpHelper helper = HttpHelper();
@@ -440,12 +473,12 @@ Future savePizza() async {
   pizza.description = txtDescription.text;
   pizza.price = double.tryParse(txtPrice.text);
   pizza.imageUrl = txtImageUrl.text;
-  
+
   // Ternary: pilih POST atau PUT
   final result = await (widget.isNew
       ? helper.postPizza(pizza)
       : helper.putPizza(pizza));
-  
+
   setState(() {
     operationResult = result;
   });
@@ -453,6 +486,7 @@ Future savePizza() async {
 ```
 
 **Conditional logic:**
+
 - `widget.isNew = true` → call `postPizza()`
 - `widget.isNew = false` → call `putPizza()`
 - Single method untuk handle both operations
@@ -464,6 +498,7 @@ Mengubah text button sesuai mode operasi.
 **Link kode:** [lib/pizza_detail.dart - button](https://github.com/aorysan/mobile_07/blob/main/week14/api/lib/pizza_detail.dart#L115-L120)
 
 **Perubahan:**
+
 ```dart
 ElevatedButton(
   child: Text(widget.isNew ? 'Add Pizza' : 'Update Pizza'),
@@ -474,6 +509,7 @@ ElevatedButton(
 ```
 
 **UX improvement:**
+
 - Create mode: "Add Pizza"
 - Edit mode: "Update Pizza"
 - Memberikan clarity ke user tentang action yang dilakukan
@@ -485,6 +521,7 @@ Menambahkan handler untuk tap pada list item untuk masuk ke edit mode.
 **Link kode:** [lib/main.dart - onTap](https://github.com/aorysan/mobile_07/blob/main/week14/api/lib/main.dart#L101-L111)
 
 **Penjelasan:**
+
 ```dart
 return ListTile(
   title: Text(snapshot.data![position].pizzaName ?? 'Unnamed Pizza'),
@@ -506,6 +543,7 @@ return ListTile(
 ```
 
 **Behavior:**
+
 - User tap pizza item → Navigate ke detail screen
 - Form ter-populate dengan data pizza yang dipilih
 - Button menampilkan "Update Pizza"
@@ -517,6 +555,7 @@ Mengupdate FAB untuk pass parameter yang diperlukan.
 **Link kode:** [lib/main.dart - FAB](https://github.com/aorysan/mobile_07/blob/main/week14/api/lib/main.dart#L118-L130)
 
 **Penjelasan:**
+
 ```dart
 floatingActionButton: FloatingActionButton(
   child: const Icon(Icons.add),
@@ -535,6 +574,7 @@ floatingActionButton: FloatingActionButton(
 ```
 
 **Behavior:**
+
 - User tap FAB (+) → Navigate ke detail screen
 - Form kosong untuk input data baru
 - Button menampilkan "Add Pizza"
@@ -545,9 +585,10 @@ Menjalankan aplikasi dan testing PUT functionality.
 
 ##### Soal 3
 
-![alt text](gif1.gif)
+![alt text](imgngif/gif1.gif)
 
 **Penjelasan:**
+
 - Tap pada salah satu pizza dari list
 - Form ter-populate dengan data existing
 - Edit field yang diinginkan (contoh: nama menjadi "Aryo Adi Putro - 2341720084")
@@ -557,6 +598,7 @@ Menjalankan aplikasi dan testing PUT functionality.
 **Cara Memverifikasi PUT Berhasil di WireMock:**
 
 1. **Cek Request Logs:**
+
    - Login ke [WireMock Cloud](https://app.wiremock.cloud/)
    - Buka Mock API Anda
    - Klik tab **"Requests"** atau **"Request Logs"**
@@ -567,23 +609,24 @@ Menjalankan aplikasi dan testing PUT functionality.
      - Timestamp: Waktu request diterima
 
 2. **Screenshot Request Logs:**
-   
-   ![WireMock Request Logs](screenshots/wiremock_logs.png)
-   
-   Contoh informasi yang terlihat:
-   ```json
-   Method: PUT
-   Path: /pizza
-   Body: {
-     "id": 1,
-     "pizzaName": "Aryo Adi Putro - 2341720084",
-     "description": "Pizza with tomato...",
-     "price": 8.75,
-     "imageUrl": "images/margherita.png"
-   }
-   Response: {"message": "Pizza was updated"}
-   Status: 200
-   ```
+
+![alt text](imgngif/image.png)
+
+Contoh informasi yang terlihat:
+
+```json
+Method: PUT
+Path: /pizza
+Body: {
+  "id": 1,
+  "pizzaName": "Aryo Adi Putro - 2341720084",
+  "description": "Pizza with tomato...",
+  "price": 8.75,
+  "imageUrl": "images/margherita.png"
+}
+Response: {"message": "Pizza was updated"}
+Status: 200
+```
 
 3. **Verifikasi di Debug Console:**
    - Output: `PUT Response: {"message": "Pizza was updated"}`
@@ -599,10 +642,12 @@ Menjalankan aplikasi dan testing PUT functionality.
 - Ini adalah **behavior yang normal** untuk mock API
 
 **Untuk melihat perubahan data yang persistent:**
+
 - Gunakan backend API yang real (Node.js + MongoDB, Laravel + MySQL, dll)
 - Atau gunakan mock service dengan storage seperti JSON Server
 
 **Cara Membuktikan POST/PUT Berhasil:**
+
 1. ✅ Response message muncul di UI (`"Pizza was updated"`)
 2. ✅ Debug console menampilkan response
 3. ✅ Request logs di WireMock menunjukkan request masuk dengan body yang benar
@@ -618,6 +663,7 @@ Praktikum ini bertujuan untuk mempelajari cara menghapus data dari web service m
 Membuat stub baru untuk endpoint DELETE di Wire Mock Cloud:
 
 **Konfigurasi:**
+
 - Name: `Delete Pizza`
 - Verb: `DELETE`
 - Address: `/pizza`
@@ -632,6 +678,7 @@ Menambahkan method `deletePizza()` di class `HttpHelper` untuk melakukan DELETE 
 **Link kode:** [lib/httphelper.dart - deletePizza](https://github.com/aorysan/mobile_07/blob/main/week14/api/lib/httphelper.dart#L44-L52)
 
 **Penjelasan method deletePizza():**
+
 ```dart
 Future<String> deletePizza(int id) async {
   const deletePath = '/pizza';
@@ -643,6 +690,7 @@ Future<String> deletePizza(int id) async {
 ```
 
 **Detail implementasi:**
+
 - Parameter: `int id` untuk identifikasi pizza yang akan dihapus
 - Method: `http.delete()` untuk DELETE request
 - Tidak memerlukan body (berbeda dengan POST/PUT)
@@ -658,14 +706,17 @@ Membungkus `ListTile` dengan `Dismissible` widget untuk swipe to delete function
 **Penjelasan komponen Dismissible:**
 
 1. **key: Key()**
+
    ```dart
    key: Key(snapshot.data![position].id.toString())
    ```
+
    - Unique key untuk setiap item
    - Menggunakan ID pizza sebagai identifier
    - Diperlukan untuk tracking widget yang di-dismiss
 
 2. **onDismissed callback:**
+
    ```dart
    onDismissed: (direction) {
      HttpHelper helper = HttpHelper();
@@ -677,14 +728,16 @@ Membungkus `ListTile` dengan `Dismissible` widget untuk swipe to delete function
      helper.deletePizza(snapshot.data![position].id!);
    }
    ```
-   
+
    **Alur operasi:**
+
    - User swipe item → `onDismissed` triggered
    - Remove item dari list lokal (UI update instant)
    - Call `deletePizza()` ke API (background operation)
    - API response di-log ke debug console
 
 3. **background:**
+
    ```dart
    background: Container(
      color: Colors.red,
@@ -696,8 +749,9 @@ Membungkus `ListTile` dengan `Dismissible` widget untuk swipe to delete function
      ),
    )
    ```
-   
+
    **UX enhancement:**
+
    - Background merah muncul saat swipe
    - Icon delete di sebelah kanan
    - Visual feedback yang jelas untuk destructive action
@@ -708,6 +762,7 @@ Membungkus `ListTile` dengan `Dismissible` widget untuk swipe to delete function
    - Tetap support `onTap` untuk edit
 
 **Keuntungan Dismissible:**
+
 - ✅ Gesture intuitif (swipe to delete)
 - ✅ Animasi smooth
 - ✅ Visual feedback dengan background
@@ -722,11 +777,12 @@ Menjalankan aplikasi dan testing DELETE functionality.
 
 **Screenshot hasil:**
 
-![alt text](gif2.gif)
+![alt text](imgngif/gif2.gif)
 
 **Cara Memverifikasi DELETE Berhasil di WireMock:**
 
 1. **Cek Request Logs:**
+
    - Login ke [WireMock Cloud](https://app.wiremock.cloud/)
    - Buka Mock API Anda
    - Klik tab **"Requests"** atau **"Request Logs"**
@@ -749,4 +805,3 @@ Sama seperti POST dan PUT, **DELETE di WireMock hanya mensimulasikan operasi** t
 - Jika app di-restart, data akan kembali muncul (data di-fetch dari stub GET yang statis)
 - Request logs di WireMock membuktikan request DELETE berhasil dikirim dan diterima
 - Untuk data persistent yang benar-benar terhapus, gunakan backend API yang real
-
