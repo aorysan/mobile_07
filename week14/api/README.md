@@ -121,3 +121,179 @@ Menjalankan aplikasi dan melihat daftar pizza yang diambil dari Mock API.
 
 ![alt text](image.png)
 
+---
+
+### Praktikum 2: Mengirim Data ke Web Service (POST)
+
+Praktikum ini bertujuan untuk mempelajari cara mengirim data ke web service menggunakan HTTP POST method. POST digunakan untuk menambahkan data baru ke server.
+
+#### Langkah 1: Setup Stub POST di Wire Mock
+
+Membuat stub baru untuk endpoint POST di Wire Mock Cloud:
+
+**Konfigurasi:**
+- Name: `Post Pizza`
+- Verb: `POST`
+- Address: `/pizza`
+- Status: `201` (Created)
+- Body Type: `JSON`
+- Body Response: `{"message": "The pizza was posted"}`
+
+#### Langkah 2: Modifikasi Model Pizza
+
+Mengubah class Pizza menjadi mutable (nullable fields) agar bisa digunakan untuk form input.
+
+**Link kode:** [lib/pizza.dart](https://github.com/aorysan/mobile_07/blob/main/week14/api/lib/pizza.dart#L1-L39)
+
+**Perubahan:**
+```dart
+// Dari final (immutable) menjadi nullable (mutable)
+int? id;
+String? pizzaName;
+String? description;
+double? price;
+String? imageUrl;
+```
+
+**Alasan perubahan:**
+- Properties nullable memungkinkan pembuatan objek Pizza kosong
+- Memudahkan assignment dari TextEditingController
+- Cocok untuk form input yang belum terisi
+
+#### Langkah 3: Tambahkan method postPizza di HttpHelper
+
+Menambahkan method `postPizza()` di class `HttpHelper` untuk melakukan POST request.
+
+**Link kode:** [lib/httphelper.dart](https://github.com/aorysan/mobile_07/blob/main/week14/api/lib/httphelper.dart#L18-L28)
+
+**Penjelasan method postPizza():**
+```dart
+Future<String> postPizza(Pizza pizza) async {
+  const postPath = '/pizza';
+  String post = json.encode(pizza.toJson()); // Serialization
+  Uri url = Uri.https(authority, postPath);
+  http.Response r = await http.post(
+    url,
+    body: post,
+    headers: {'Content-Type': 'application/json'},
+  );
+  return r.body;
+}
+```
+
+**Detail implementasi:**
+- `json.encode()`: Mengkonversi Map dari `toJson()` menjadi JSON string
+- `http.post()`: Melakukan POST request dengan body JSON
+- `headers`: Menambahkan Content-Type untuk memberitahu server bahwa data adalah JSON
+- Return: Response body dari server (message success/error)
+
+#### Langkah 4: Buat PizzaDetailScreen
+
+Membuat file `pizza_detail.dart` yang berisi form untuk input data pizza baru.
+
+**Link kode:** [lib/pizza_detail.dart](https://github.com/aorysan/mobile_07/blob/main/week14/api/lib/pizza_detail.dart#L1-L128)
+
+**Komponen utama:**
+
+1. **TextEditingController** (5 buah):
+   - `txtId`: Input ID pizza
+   - `txtName`: Input nama pizza
+   - `txtDescription`: Input deskripsi
+   - `txtPrice`: Input harga
+   - `txtImageUrl`: Input URL gambar
+
+2. **operationResult**:
+   - String untuk menyimpan response dari server
+   - Ditampilkan di atas form dengan background hijau
+
+3. **dispose()**:
+   - Override method untuk cleanup controllers
+   - Penting untuk menghindari memory leaks
+
+**Link kode:** [dispose() method](https://github.com/aorysan/mobile_07/blob/main/week14/api/lib/pizza_detail.dart#L20-L27)
+
+#### Langkah 5: Implementasi UI Form
+
+Membuat UI form dengan TextField untuk setiap property Pizza.
+
+**Link kode:** [build() method](https://github.com/aorysan/mobile_07/blob/main/week14/api/lib/pizza_detail.dart#L42-L123)
+
+**Struktur UI:**
+- `Scaffold` dengan AppBar
+- `SingleChildScrollView` untuk scrollable form
+- `Column` berisi:
+  - Text untuk menampilkan result
+  - 5 TextField dengan decoration dan keyboardType yang sesuai
+  - ElevatedButton untuk trigger POST
+
+**Fitur TextField:**
+- Border outline untuk visual yang jelas
+- HintText sebagai placeholder
+- KeyboardType sesuai tipe data (number, text)
+
+#### Langkah 6: Implementasi method postPizza
+
+Membuat method untuk mengambil data dari form dan mengirim ke server.
+
+**Link kode:** [postPizza() method](https://github.com/aorysan/mobile_07/blob/main/week14/api/lib/pizza_detail.dart#L29-L40)
+
+**Penjelasan:**
+```dart
+Future postPizza() async {
+  HttpHelper helper = HttpHelper();
+  Pizza pizza = Pizza(); // Buat objek kosong
+  
+  // Ambil data dari controllers
+  pizza.id = int.tryParse(txtId.text);
+  pizza.pizzaName = txtName.text;
+  pizza.description = txtDescription.text;
+  pizza.price = double.tryParse(txtPrice.text);
+  pizza.imageUrl = txtImageUrl.text;
+  
+  // POST ke server
+  String result = await helper.postPizza(pizza);
+  
+  // Update UI dengan response
+  setState(() {
+    operationResult = result;
+  });
+}
+```
+
+**Kegunaan tryParse:**
+- `int.tryParse()`: Konversi string ke int, return null jika gagal
+- `double.tryParse()`: Konversi string ke double, return null jika gagal
+- Mencegah error jika user input invalid
+
+#### Langkah 7: Tambahkan FloatingActionButton
+
+Menambahkan FAB di main screen untuk navigasi ke form detail.
+
+**Link kode:** [FloatingActionButton](https://github.com/aorysan/mobile_07/blob/main/week14/api/lib/main.dart#L68-L78)
+
+**Penjelasan:**
+```dart
+floatingActionButton: FloatingActionButton(
+  child: const Icon(Icons.add),
+  onPressed: () {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const PizzaDetailScreen(),
+      ),
+    );
+  },
+),
+```
+
+**Navigator.push:**
+- Menambahkan route baru ke navigation stack
+- MaterialPageRoute: Transition animation default Material Design
+- User bisa kembali dengan back button
+
+#### Langkah 8: Run dan Test
+
+Menjalankan aplikasi dan testing POST functionality.
+
+##### Soal 2
+![alt text](gif.gif)

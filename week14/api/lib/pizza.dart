@@ -1,17 +1,11 @@
 class Pizza {
-  final int id;
-  final String pizzaName;
-  final String description;
-  final double price;
-  final String imageUrl;
+  int? id;
+  String? pizzaName;
+  String? description;
+  double? price;
+  String? imageUrl;
 
-  Pizza({
-    required this.id,
-    required this.pizzaName,
-    required this.description,
-    required this.price,
-    required this.imageUrl,
-  });
+  Pizza({this.id, this.pizzaName, this.description, this.price, this.imageUrl});
 
   // Factory constructor untuk konversi dari JSON (deserialization)
   factory Pizza.fromJson(Map<String, dynamic> json) {

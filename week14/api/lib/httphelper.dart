@@ -14,6 +14,19 @@ class HttpHelper {
   final String authority = '4dvq1.wiremockapi.cloud';
   final String path = 'pizzalist';
 
+  Future<String> postPizza(Pizza pizza) async {
+    const postPath = '/pizza';
+    String post = json.encode(pizza.toJson());
+    Uri url = Uri.https(authority, postPath);
+    http.Response r = await http.post(
+      url,
+      body: post,
+      headers: {'Content-Type': 'application/json'},
+    );
+    print('POST Response: ${r.body}'); // Debug
+    return r.body;
+  }
+
   Future<List<Pizza>> getPizzaList() async {
     final Uri url = Uri.https(authority, path);
     final http.Response result = await http.get(url);
